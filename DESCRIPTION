@@ -1,0 +1,37 @@
+Package: dpasurv
+Type: Package
+Title: Dynamic Path Analysis of Survival Data via Aalen's Additive Hazards Model
+Version: 1.0.0
+Authors@R: 
+    c(person(given = "Matthias",
+           family = "Kormaksson",
+           role = c("aut", "cre"),
+           email = "matthias-1.kormaksson_ext@novartis.com"),
+      person(given = "Markus",
+           family = "Lange",
+           role = c("aut")),
+      person(given = "David",
+           family = "Demanse",
+           role = c("aut")),
+      person(given = "Susanne",
+           family = "Strohmaier",
+           role = c("aut")))
+Maintainer: Matthias Kormaksson <matthias-1.kormaksson_ext@novartis.com>
+Description: Dynamic path analysis with estimation of the corresponding direct, indirect, and total effects, based on Fosen et al. (2006). The main outcome of interest is a counting process from survival analysis (or recurrent events) data. At each time of event, ordinary linear regression is used to estimate the relation between the covariates, while Aalen's additive hazard model is used for the regression of the counting process on the covariates.
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.6.0)
+Imports:
+    dplyr (>= 0.8.3),
+    tidyr (>= 0.8.3),
+    ggplot2 (>= 3.2.0),
+    survival (>= 2.44.1.1),
+    timereg (>= 1.9.4)
+RoxygenNote: 7.2.3
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3

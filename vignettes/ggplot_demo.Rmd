@@ -1,0 +1,101 @@
+---
+title: "ggplot plotting functionality"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ggplot plotting functionality}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.main-container {
+  max-width: unset;
+}
+</style>
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(dpasurv)
+```
+
+
+## Load data and run analysis
+
+```{r}
+data(simdata)
+
+s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=100)
+
+direct <- effect(x ~ outcome, s)
+indirect <- effect(x ~ M ~ outcome, s)
+total <- sum(direct, indirect)
+
+# Multiple treatment arms:
+s2 <- dpa(survival::Surv(start,stop,event)~M+dose, list(M~dose), id="subject", data=simdata, boot.n=100)
+
+direct2 <- effect(dose ~ outcome, s2)
+indirect2 <- effect(dose ~ M ~ outcome, s2)
+total2 <- sum(direct2, indirect2)
+```
+
+## Basic plotting functionality
+
+### Single arm
+
+```{r}
+par(mfrow=c(1,3))
+plot(direct)
+plot(indirect); abline(h=0, lty=2, col=2)
+plot(total); abline(h=0, lty=2, col=2)
+```
+
+### Multiple arm
+
+```{r, eval=FALSE}
+par(mfrow=c(2,3))
+plot(direct2); abline(h=0, lty=2, col=2)
+plot(indirect2); abline(h=0, lty=2, col=2)
+plot(total2); abline(h=0, lty=2, col=2)
+```
+
+## ggplot plotting functionality
+
+We can input an object of type "effect"
+
+```{r}
+ggplot.effect(indirect)
+```
+
+Alternatively, we can provide a list of "effect"-object, for example
+
+```{r}
+ggplot.effect(list(direct, indirect, total))
+```
+
+Different dose level will be plotted on top of each other
+
+```{r}
+ggplot.effect(direct2)
+```
+
+Also works when we have multiple treatment arms
+
+```{r}
+ggplot.effect(list(direct2, indirect2, total2))
+```
+
+It is possible to customize plotting parameters, for example
+
+```{r}
+ggplot.effect(list(direct, indirect, total), 
+              titles = c("Direct","Indirect","Total"),
+              x_label = "Time (in years)", 
+              y_label = "Custom y-label")
+```
+

@@ -1,0 +1,101 @@
+---
+title: "The dpasurv package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The dpasurv package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+.main-container {
+  max-width: unset;
+}
+</style>
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(dpasurv)
+```
+
+## 1. Introduction
+
+Dynamic path analysis is a method aimed at modeling the time-varying relationships between a randomized treatment, a longitudinal covariate process, and a survival time-to-event outcome. In this vignette we demonstrate the main functionalities of the dpasurv package.
+
+
+## 2. Methods 
+
+### Dynamic path analysis
+
+Dynamic path analysis involves modeling so-called *dynamic path diagrams* such as the one depicted in Figure 1. A dynamic path diagrams is defined in Fosen et al. (2006) as a time-indexed sequence of directed acyclic graphs (dynamic DAG) that is characterized by a treatment variable, $\small X$, one or more longitudinal mediator variables, $\small M(t)$, and a survival (time-to-event) outcome with hazard $\small \lambda(t)$ that takes the role of a single terminal node in the dynamic DAG. Additional time-fixed confounder variables, such as baseline characteristics, $\small C$, may be incorporated as well. 
+```{r, out.width = "200px", include=TRUE, fig.align="center", echo=FALSE, fig.cap="Figure 1. A simple dynamic path diagram with treatment $\\small X$, a single mediator $\\small M(t)$, and confounders $\\small C$."}
+knitr::include_graphics("../man/figures/simple_dag.png")
+```
+Relationships between variables are represented by directed edges between nodes and collectively the nodes and edges imply an underlying model structure. More specifically, each child node represents an entity to be modeled while the corresponding parent nodes represent the underlying model covariates. In Figure 1 there are two implied models, one corresponding to the hazard $\small \lambda(t)$ of the time-to-event outcome, and the other corresponding to the mediator response $\small M(t)$.
+
+A defining feature of dynamic path analysis as defined in Fosen et al. (2006) is the specific choice of models for the dynamic DAG, namely the so-called *dynamic path models*. At the core of these is Aalen's additive regression model for the survival outcome at the terminal node while all other models involve recursive least squares regressions. In the following equations we see the dynamic path models corresponding to Figure 1:
+\begin{align}
+\lambda(t) &= R(t) \cdot \left\{\beta_0(t) + \beta_1(t) X + \beta_2(t) M(t) + C\gamma \right\},  \tag{1} \\
+M(t) &= \alpha_0(t) + \alpha_1(t) X + C\gamma + \varepsilon(t).  \tag{2}
+\end{align}
+In the above $\small R(t)$ is the *at-risk* function indicating whether subject is still under observation (i.e. alive and still under follow up) just before time $\small t$, and $\small \varepsilon(t)$ is a time-dependent error term. Under the *outcome model* (1) the hazard is assumed to change linearly as a function of treatment, mediator(s) and confounders, while in the *mediator model* (2) the longitudinal mediator is regressed on treatment and confounders.
+
+The parameters of principal interest are those characterizing the relationships between treatment, mediator(s) and survival, namely $\small \beta_1(t), \beta_2(t)$, and $\small \alpha_1(t)$. The goal of dynamic path analysis (and the `dpasurv` package) is to estimate these key parameters, and while the package may fit more general models (e.g. with more mediator nodes and additional edges), in this vignette we will illustrate the underlying methodology and package functionalities on the simple dynamic DAG shown in Figure 1.
+
+### Direct, indirect and total effects
+
+One of the most appealing features of dynamic path analysis is how the total effect may be easily decomposed into a sum of direct and indirect effects.
+
+### Estimation and inference
+
+The estimation of each dynamic path model is done by recursive least squares regression as usual in path analysis
+
+In this subsection we will define estimators for the direct, indirect and total effects. As the analytic derivation of underlying distributions is not tractable we assess variability of these estimators using bootstrap confidence intervals.
+
+## 3. Implementation
+
+The `dpasurv` package implements the complete dynamic path analysis workflow. 
+
+### Fitting the dynamic path model
+
+The following code fits a dynamic path model aimed at evaluating potential mediation of the effect of treatment `x` through a longitudinal mediator `M`.
+```{r}
+s <- dpa(survival::Surv(start, stop, event) ~ M + x, list(M ~ x), id = "subject", data = simdata, boot.n = 100)
+```
+
+### Estimating direct, indirect and total effects
+
+Once the dynamic path model has been fitted, the user can extract direct and indirect effects with the `effect()` function
+```{r, eval=FALSE}
+direct <- effect(x ~ outcome, s, alpha=0.05)
+indirect <- effect(x ~ M ~ outcome, s, alpha=0.05)
+```
+The outputs above (`direct` and `indirect`) are both objects of class `"effect"` and they can be summed together via the `sum` method to obtain the total effect
+```{r, eval=FALSE}
+total <- sum(direct, indirect)
+```
+### Plotting effects
+
+The `plot` method for objects of class `"effect"` can be used to visualize the estimated effects along with confidence bands.
+```{r, eval=FALSE, fig.width=7, fig.height=4}
+par(mfrow=c(1,3))
+plot(direct); abline(h=0, lty=2, col=2)
+plot(indirect); abline(h=0, lty=2, col=2)
+plot(total); abline(h=0, lty=2, col=2)
+```
+
+
+## A. Appendix  
+
+### Aalen's additive hazards model
+
+Aalen's additive hazards model originates from the following intuitive counting process formulation:
+\begin{equation}
+dN(t) = R(t) \cdot \left\{\beta_0(t) + \beta_1(t) X + \beta_2(t) M(t)\right\} + dW(t)
+\end{equation}

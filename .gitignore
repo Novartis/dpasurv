@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+inst/doc
+vignettes/.build.timestamp
+/doc/
+/Meta/
+doc
+Meta
