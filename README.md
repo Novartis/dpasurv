@@ -23,7 +23,7 @@ install.packages("devtools")
 ```
 ## Usage
 ``` r
-library(dplyr)
+library(dpasurv)
 
 # Perform dynamic path analysis
 analysis <- dpa(survival::Surv(start, stop, event) ~ M + x, list(M ~ x), id = "subject", data = simdata, boot.n = 100)
