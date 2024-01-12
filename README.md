@@ -43,15 +43,26 @@ plot(total); abline(h=0, lty=2, col=2)
 ggplot.effect(list(direct, indirect, total))
 ```
 
-## References 
+## Citing the dpasurv package 
 
 The dpasurv package was published on github in parallel with the following manuscript:
 
-- Dynamic path analysis [Kormaksson et al. (2023)](under-review)
+``` r
+@article{dpasurv,
+  title={Dynamic path analysis for exploring treatment effect mediation processes in clinical trials with time-to-event endpoints},
+  author={Kormaksson, M. and Lange, M. R. and Demanse, D. and Strohmaier, S. and Duan, J. and Xie, Q. and Carbini, M. and Bossen, C. and Guettner, A. and
+Maniero, A.},
+  journal={(submitted)},
+  volume={},
+  number={},
+  pages={},
+  year={2024},
+}
+```
 
 If you publish results obtained from the dpasurv package, please cite the above paper.
 
-# Code authors
+## Code authors
 
 - Matthias Kormaksson, matthias-1.kormaksson_ext@novartis.com
 - Markus Lange, markus.lange@novartis.com
