@@ -43,7 +43,7 @@ plot(total); abline(h=0, lty=2, col=2)
 ggplot.effect(list(direct, indirect, total))
 ```
 
-## Citing the dpasurv package 
+## Citation
 
 The dpasurv package was published on github in parallel with the following manuscript:
 
