@@ -17,4 +17,7 @@ The effect-objects can be summed together to obtain the total effect (i.e. direc
 ``` r
 # The easiest way to install dpasurv is to run (assuming devtools package is already installed):
 devtools::install_github("Novartis/dpasurv")
+
+# If devtools package is not installed, then prior to above you may run:
+install.packages("devtools")
 ```
