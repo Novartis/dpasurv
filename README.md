@@ -63,7 +63,7 @@ If you publish results obtained from the dpasurv package, please cite the above 
 
 ## Code authors
 
-- Matthias Kormaksson, matthias-1.kormaksson_ext@novartis.com
+- Matthias Kormaksson, matthias-1.kormaksson_ext@novartis.com (maintainer)
 - Markus Lange, markus.lange@novartis.com
 - David Demanse, david.demanse@novartis.com
 - Susanne Strohmaier, susanne.strohmaier@meduniwien.ac.at
