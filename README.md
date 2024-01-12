@@ -42,3 +42,18 @@ plot(total); abline(h=0, lty=2, col=2)
 # Plot the results with ggplot2 graphics:
 ggplot.effect(list(direct, indirect, total))
 ```
+
+## References 
+
+The dpasurv package was published on github in parallel with the following manuscript:
+
+- Dynamic path analysis [Kormaksson et al. (2023)](under-review)
+
+If you publish results obtained from the dpasurv package, please cite the above paper.
+
+# Code authors
+
+- Matthias Kormaksson, matthias-1.kormaksson_ext@novartis.com
+- Markus Lange, markus.lange@novartis.com
+- David Demanse, david.demanse@novartis.com
+- Susanne Strohmaier, susanne.strohmaier@meduniwien.ac.at
