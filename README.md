@@ -21,3 +21,24 @@ devtools::install_github("Novartis/dpasurv")
 # If devtools package is not installed, then prior to above you may run:
 install.packages("devtools")
 ```
+## Usage
+``` r
+library(dplyr)
+
+# Perform dynamic path analysis
+analysis <- dpa(survival::Surv(start, stop, event) ~ M + x, list(M ~ x), id = "subject", data = simdata, boot.n = 100)
+
+# Extract direct, indirect and total effect
+direct <- effect(x ~ outcome, analysis, alpha=0.05)
+indirect <- effect(x ~ M ~ outcome, analysis, alpha=0.05)
+total <- sum(direct, indirect)
+
+# Plot the results
+par(mfrow=c(1,3))
+plot(direct); abline(h=0, lty=2, col=2)
+plot(indirect); abline(h=0, lty=2, col=2)
+plot(total); abline(h=0, lty=2, col=2)
+
+# Plot the results with ggplot2 graphics:
+ggplot.effect(list(direct, indirect, total))
+```
