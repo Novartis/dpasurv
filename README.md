@@ -22,6 +22,8 @@ devtools::install_github("Novartis/dpasurv")
 install.packages("devtools")
 ```
 ## Usage
+
+A vignette on how to use the *dpasurv* package can be found [here](http://opensource.nibr.com/dpasurv/), and basic usage is summarized below:
 ``` r
 library(dpasurv)
 
