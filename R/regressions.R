@@ -11,7 +11,7 @@
 #' @param dataset dataset (in counting process format)
 #' @param w (optional) weights (not actually used in the default implementation of dynamic path analysis, set to 1)
 #'
-#' @return data.frame with observation times and estimated coefficients for independet variables in "regformula"
+#' @return data.frame with observation times and estimated coefficients for independent variables in "regformula"
 #' @export
 #'
 #' @keywords internal
