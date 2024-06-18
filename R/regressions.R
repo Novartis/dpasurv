@@ -74,34 +74,50 @@ Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, 
 #' @export
 #'
 #' @keywords internal
-Areg = function(out.formula, id, data, ...) {
+Areg = function(out.formula, id, data, method, ...) {
 
   `%>%` <- dplyr::`%>%`
 
-  # Aalen's additive hazard model:
-  aalen.obj <- timereg::aalen(out.formula, data = data, id = data[[id]], ...)
+  # Fit Aalen's additive model with timereg package
+  if (method == "timereg") {
 
-  # Gather non-cumulative effect estimates from the timereg::aalen() regression
-  aalen.coefs <- aalen.obj$cum[-1,] %>%
-    dplyr::as_tibble() %>%
-    dplyr::rename(times = time) %>%
-    dplyr::mutate_at(dplyr::vars(-c("times")), function(x) c(x[1],diff(x)))
+    # Aalen's additive hazard model:
+    aalen.obj <- timereg::aalen(out.formula, data = data, id = data[[id]], ...)
 
-  if (is.matrix(aalen.obj$gamma)) {
+    # Gather non-cumulative effect estimates from the timereg::aalen() regression
+    aalen.coefs <- aalen.obj$cum[-1,] %>%
+      dplyr::as_tibble() %>%
+      dplyr::rename(times = time) %>%
+      dplyr::mutate_at(dplyr::vars(-c("times")), function(x) c(x[1],diff(x)))
 
-    const.params <- base::outer(c(aalen.coefs$times[1L], base::diff(aalen.coefs$times)) , base::as.numeric(aalen.obj$gamma), FUN="*")
+    if (is.matrix(aalen.obj$gamma)) {
 
-    base::colnames(const.params) <- base::row.names(aalen.obj$gamma)
-    base::colnames(const.params) <- base::gsub("const\\(","", base::colnames(const.params))
-    base::colnames(const.params) <- base::substr(base::colnames(const.params), 1, base::nchar(base::colnames(const.params))-1)
+      const.params <- base::outer(c(aalen.coefs$times[1L], base::diff(aalen.coefs$times)) , base::as.numeric(aalen.obj$gamma), FUN="*")
 
-    aalen.coefs <- aalen.coefs %>%
-      dplyr::bind_cols(const.params)
+      base::colnames(const.params) <- base::row.names(aalen.obj$gamma)
+      base::colnames(const.params) <- base::gsub("const\\(","", base::colnames(const.params))
+      base::colnames(const.params) <- base::substr(base::colnames(const.params), 1, base::nchar(base::colnames(const.params))-1)
+
+      aalen.coefs <- aalen.coefs %>%
+        dplyr::bind_cols(const.params)
+
+    }
+
+    names(aalen.coefs) <- base::gsub("\\(Intercept\\)", "Intercept", names(aalen.coefs))
+    names(aalen.coefs) <- base::gsub("\\(Intercept\\)", "Intercept", names(aalen.coefs))
+
+  } else { # Fit Aalen's model using the default method = "aareg"
+
+    # Aalen's additive hazard model:
+    aalen.obj <- survival::aareg(out.formula, data = data, ...)
+
+    rownames(aalen.obj$coefficient) <- NULL
+
+    # Gather non-cumulative effect estimates from the survival::aareg() regression
+    aalen.coefs <- cbind(data.frame(times=aalen.obj$times), aalen.obj$coefficient) %>%
+      dplyr::as_tibble()
 
   }
-
-  names(aalen.coefs) <- base::gsub("\\(Intercept\\)", "Intercept", names(aalen.coefs))
-  names(aalen.coefs) <- base::gsub("\\(Intercept\\)", "Intercept", names(aalen.coefs))
 
   return(list(aalen = aalen.obj, coefs = aalen.coefs))
 

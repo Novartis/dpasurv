@@ -3,10 +3,12 @@
 #' @param out.formula Survival formula for Aalen's additive hazards model.
 #' @param mediator.formulas Mediator regression formula (in case of a single mediator), or a list of regression formulas (in case of multiple mediators).
 #' The formulas must be ordered according to Directed Acyclic Graph Structure (see Details).
-#' @param id character string indicating which column of 'data' corresponds to the subject ID.
+#' @param id character string indicating which column of 'data' corresponds to the subject ID. Bootstrapping will be performed on this id.
 #' @param data Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with
 #' any mediators and baseline covariates.
 #' @param boot.n Number of bootstrap samples.
+#' @param method The underlying implementation of Aalen's additive regression model. Defaults to "aareg", which applies the survival::aareg()
+#' implementation, while method = "timereg" will deploy the timereg::aalen() implementation.
 #' @param progress_bar Boolean. If TRUE, show progress bar. Defaults to FALSE.
 #' @param ... other parameters passed to Aalen's additive hazards regression function "timereg::aalen()"
 #'
@@ -53,7 +55,7 @@
 #' plot(indirect2)
 #' plot(total2)
 #'
-dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, progress_bar = FALSE, ...) {
+dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "aareg", progress_bar = FALSE, ...) {
 
   `%>%` <- dplyr::`%>%`
 
@@ -91,21 +93,32 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, progress_b
   coefs <- base::list()
 
   # Aalen's additive hazard model:
-  areg.obj <- Areg(out.formula, data = data, id = id, ...)
+  areg.obj <- Areg(out.formula, data = data, id = id, method = method, ...)
 
-  # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
-  # at unique observed times. We sum up the coefficients across ties within unique times
-  # since we are only interested in cumulative effects anyway. The mediator regression below
-  # will only be applied at the unique event times and would be constant across tied
-  # survival times. So this strategy also works for cumulative indirect effects.
-  coefs[["outcome"]] <- areg.obj$coefs %>%
-    dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
-    dplyr::group_by(time.bins) %>%
-    dplyr::mutate(times = times[1L]) %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-time.bins) %>%
-    dplyr::group_by(times) %>%
-    dplyr::summarise_all(sum)
+  # Retrieve and summarise coefs under "timereg" implementation
+  if (method == "timereg") {
+
+    # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
+    # at unique observed times. We sum up the coefficients across ties within unique times
+    # since we are only interested in cumulative effects anyway. The mediator regression below
+    # will only be applied at the unique event times and would be constant across tied
+    # survival times. So this strategy also works for cumulative indirect effects.
+    coefs[["outcome"]] <- areg.obj$coefs %>%
+      dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
+      dplyr::group_by(time.bins) %>%
+      dplyr::mutate(times = times[1L]) %>%
+      dplyr::ungroup() %>%
+      dplyr::select(-time.bins) %>%
+      dplyr::group_by(times) %>%
+      dplyr::summarise_all(sum)
+
+  } else { # Retrieve and summarise coefs under "aareg" implementation
+
+    coefs[["outcome"]] <- areg.obj$coefs %>%
+      dplyr::group_by(times) %>%
+      dplyr::summarise_all(sum)
+
+  }
 
   # Mediator models:
   for (ii in 1:num.mediators)
@@ -126,7 +139,12 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, progress_b
   args <- base::list(...)
   args[["out.formula"]] <- out.formula
   args[["id"]] <- "bootstrapID"
-  args[["n.sim"]] <- 0
+  args[["method"]] <- method
+
+  # override n.sim = 1000 if method == "timereg"
+  if (method == "timereg") {
+    args[["n.sim"]] <- 0
+  }
 
   if(progress_bar) {
     pb <- utils::txtProgressBar(min = 1,
@@ -177,20 +195,32 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, progress_b
     # Aalen's additive hazard model:
     areg.obj.boot <- base::do.call(Areg, args)
 
-  # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
-  # at unique observed times. We sum up the coefficients across ties within unique times
-  # since we are only interested in cumulative effects anyway. The mediator regression below
-  # will only be applied at the unique event times and would be constant across tied
-  # survival times. So this strategy also works for cumulative indirect effects.
-    boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
-      dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
-      dplyr::group_by(time.bins) %>%
-      dplyr::mutate(times = times[1L]) %>%
-      dplyr::ungroup() %>%
-      dplyr::select(-time.bins) %>%
-      dplyr::group_by(times) %>%
-      dplyr::summarise_all(sum) %>%
-      dplyr::mutate(boot.id = b)
+    # Retrieve and summarise coefs under "timereg" implementation
+    if (method == "timereg") {
+
+      # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
+      # at unique observed times. We sum up the coefficients across ties within unique times
+      # since we are only interested in cumulative effects anyway. The mediator regression below
+      # will only be applied at the unique event times and would be constant across tied
+      # survival times. So this strategy also works for cumulative indirect effects.
+      boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
+        dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
+        dplyr::group_by(time.bins) %>%
+        dplyr::mutate(times = times[1L]) %>%
+        dplyr::ungroup() %>%
+        dplyr::select(-time.bins) %>%
+        dplyr::group_by(times) %>%
+        dplyr::summarise_all(sum) %>%
+        dplyr::mutate(boot.id = b)
+
+    } else { # Retrieve and summarise coefs under "aareg" implementation
+
+      boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
+        dplyr::group_by(times) %>%
+        dplyr::summarise_all(sum) %>%
+        dplyr::mutate(boot.id = b)
+
+    }
 
     # Mediator models:
     for (ii in 1:num.mediators)
