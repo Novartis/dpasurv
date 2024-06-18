@@ -78,10 +78,10 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, progress_b
 
   # Keep track of observed times (of event). This gets passed to the function resolve.ties to
   # guarantee that (in case of ties) we don't generate death times that exceed other subject's death times
-  obstimes <- base::sort(data[[meta$outcome$stopt]][data[[meta$outcome$event]]==1])
+  obstimes <- unique(base::sort(data[[meta$outcome$stopt]][data[[meta$outcome$event]]==1]))
 
   # Resolve ties (if any) by adding random noise to duplicates:
-  data[[meta$outcome$stopt]] <- resolve.ties(data[[meta$outcome$stopt]], data[[meta$outcome$event]], obstimes)
+  # data[[meta$outcome$stopt]] <- resolve.ties(data[[meta$outcome$stopt]], data[[meta$outcome$event]], obstimes)
 
   #########################
   # Obtain estimates
@@ -93,7 +93,19 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, progress_b
   # Aalen's additive hazard model:
   areg.obj <- Areg(out.formula, data = data, id = id, ...)
 
-  coefs[["outcome"]] <- areg.obj$coefs
+  # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
+  # at unique observed times. We sum up the coefficients across ties within unique times
+  # since we are only interested in cumulative effects anyway. The mediator regression below
+  # will only be applied at the unique event times and would be constant across tied
+  # survival times. So this strategy also works for cumulative indirect effects.
+  coefs[["outcome"]] <- areg.obj$coefs %>%
+    dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
+    dplyr::group_by(time.bins) %>%
+    dplyr::mutate(times = times[1L]) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(-time.bins) %>%
+    dplyr::group_by(times) %>%
+    dplyr::summarise_all(sum)
 
   # Mediator models:
   for (ii in 1:num.mediators)
@@ -115,9 +127,6 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, progress_b
   args[["out.formula"]] <- out.formula
   args[["id"]] <- "bootstrapID"
   args[["n.sim"]] <- 0
-
-  # Update obstimes after resolving ties above. This will be passed to resolve.ties for all bootstrap samples
-  obstimes <- coefs[["outcome"]]$times
 
   if(progress_bar) {
     pb <- utils::txtProgressBar(min = 1,
@@ -160,7 +169,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, progress_b
 
     # Resolve ties by adding random noise to duplicates (by supplying all obstimes we guarantee against generating
     # death times of a tied subject that exceeds another subject's death time):
-    boot.data[[meta$outcome$stopt]] <- resolve.ties(boot.data[[meta$outcome$stopt]], boot.data[[meta$outcome$event]], obstimes)
+    # boot.data[[meta$outcome$stopt]] <- resolve.ties(boot.data[[meta$outcome$stopt]], boot.data[[meta$outcome$event]], obstimes)
 
     # Update data set passed to Areg:
     args$data <- boot.data
@@ -168,6 +177,11 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, progress_b
     # Aalen's additive hazard model:
     areg.obj.boot <- base::do.call(Areg, args)
 
+  # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
+  # at unique observed times. We sum up the coefficients across ties within unique times
+  # since we are only interested in cumulative effects anyway. The mediator regression below
+  # will only be applied at the unique event times and would be constant across tied
+  # survival times. So this strategy also works for cumulative indirect effects.
     boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
       dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
       dplyr::group_by(time.bins) %>%
