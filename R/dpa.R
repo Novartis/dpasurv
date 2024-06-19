@@ -7,8 +7,8 @@
 #' @param data Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with
 #' any mediators and baseline covariates.
 #' @param boot.n Number of bootstrap samples.
-#' @param method The underlying implementation of Aalen's additive regression model. Defaults to "aareg", which applies the survival::aareg()
-#' implementation, while method = "timereg" will deploy the timereg::aalen() implementation.
+#' @param method The underlying implementation of Aalen's additive regression model. Defaults to "timereg", which applies the timereg::aalen() implementation,
+#' while method = "aareg" will deploy the survival::aareg() implementation.
 #' @param progress_bar Boolean. If TRUE, show progress bar. Defaults to FALSE.
 #' @param ... other parameters passed to Aalen's additive hazards regression function "timereg::aalen()"
 #'
@@ -55,7 +55,7 @@
 #' plot(indirect2)
 #' plot(total2)
 #'
-dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "aareg", progress_bar = FALSE, ...) {
+dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "timereg", progress_bar = FALSE, ...) {
 
   `%>%` <- dplyr::`%>%`
 
