@@ -7,10 +7,12 @@
 #' @param data Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with
 #' any mediators and baseline covariates.
 #' @param boot.n Number of bootstrap samples.
-#' @param method The underlying implementation of Aalen's additive regression model. Defaults to "timereg", which applies the timereg::aalen() implementation,
-#' while method = "aareg" will deploy the survival::aareg() implementation.
+#' @param method The underlying implementation of Aalen's additive regression model. Defaults to "aareg", which relies on the survival::aareg() implementation,
+#' while method = "timereg" uses the timereg::aalen() implementation.
 #' @param progress_bar Boolean. If TRUE, show progress bar. Defaults to FALSE.
-#' @param ... other parameters passed to Aalen's additive hazards regression function "timereg::aalen()"
+#' @param ... other parameters passed to the Aalen's additive hazards model implementation. If method = "timereg", then ... will be passed to
+#' timereg::aalen(), while if method = "aareg", then ... will be passed to survival::aareg(). If ... contains parameters that don't belong to the formalArgs of
+#' the corresponding implementation then those parameters will be ignored.
 #'
 #' @return Object of class `dpa` with following fields:
 #' \describe{
@@ -22,7 +24,7 @@
 #' }
 #' @export
 #'
-#' @details \code{dpa} performs Dynamic Path Analysis of a Directed Acyclic Graph. The out.formula
+#' @details \code{dpa} performs Dynamic Path Analysis of a Directed Acyclic Graph (DAG). The out.formula
 #' can have as covariates all mediators listed in mediator.formulas. The mediator.formulas must obey the
 #' following DAG structure rule: The response of the k-th formula cannot appear as covariate in any of the formulas
 #' k+1, ..., length(mediator.formulas).
@@ -55,7 +57,7 @@
 #' plot(indirect2)
 #' plot(total2)
 #'
-dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "timereg", progress_bar = FALSE, ...) {
+dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "aareg", progress_bar = FALSE, ...) {
 
   `%>%` <- dplyr::`%>%`
 
@@ -92,11 +94,15 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
   # List of coefficients from the different models (and corresponding bootstrap coefficients):
   coefs <- base::list()
 
-  # Aalen's additive hazard model:
-  areg.obj <- Areg(out.formula, data = data, id = id, method = method, ...)
+  arguments <- list(out.formula = out.formula, data = data, id = id, method = method)
+
+  dot.args <- list(...)
 
   # Retrieve and summarise coefs under "timereg" implementation
   if (method == "timereg") {
+
+    # Aalen's additive hazard model:
+    areg.obj <- do.call(Areg, c(arguments, dot.args[base::intersect(formalArgs(timereg::aalen), names(dot.args))]))
 
     # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
     # at unique observed times. We sum up the coefficients across ties within unique times
@@ -113,6 +119,9 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
       dplyr::summarise_all(sum)
 
   } else { # Retrieve and summarise coefs under "aareg" implementation
+
+    # Aalen's additive hazard model:
+    areg.obj <- do.call(Areg, c(arguments, dot.args[base::intersect(formalArgs(survival::aareg), names(dot.args))]))
 
     coefs[["outcome"]] <- areg.obj$coefs %>%
       dplyr::group_by(times) %>%
@@ -134,17 +143,6 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
   # Create empty list of bootstrapped coefficients:
   boot.coefs <- base::vector("list", base::length(coefs))
   base::names(boot.coefs) <- base::names(coefs)
-
-  # gather arguments passed to timereg::aalen inside the bootstrap loop (n.sim is set to zero for faster computing)
-  args <- base::list(...)
-  args[["out.formula"]] <- out.formula
-  args[["id"]] <- "bootstrapID"
-  args[["method"]] <- method
-
-  # override n.sim = 1000 if method == "timereg"
-  if (method == "timereg") {
-    args[["n.sim"]] <- 0
-  }
 
   if(progress_bar) {
     pb <- utils::txtProgressBar(min = 1,
@@ -189,14 +187,17 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
     # death times of a tied subject that exceeds another subject's death time):
     # boot.data[[meta$outcome$stopt]] <- resolve.ties(boot.data[[meta$outcome$stopt]], boot.data[[meta$outcome$event]], obstimes)
 
-    # Update data set passed to Areg:
-    args$data <- boot.data
-
-    # Aalen's additive hazard model:
-    areg.obj.boot <- base::do.call(Areg, args)
+    arguments[["data"]] <- boot.data
+    arguments[["id"]] <- "bootstrapID"
 
     # Retrieve and summarise coefs under "timereg" implementation
     if (method == "timereg") {
+
+      # Set/Overwrite n.sim = 0 for all the bootstraps:
+      dot.args[["n.sim"]] <- 0
+
+      # Aalen's additive hazard model:
+      areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(formalArgs(timereg::aalen), names(dot.args))]))
 
       # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
       # at unique observed times. We sum up the coefficients across ties within unique times
@@ -214,6 +215,9 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
         dplyr::mutate(boot.id = b)
 
     } else { # Retrieve and summarise coefs under "aareg" implementation
+
+      # Aalen's additive hazard model:
+      areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(formalArgs(survival::aareg), names(dot.args))]))
 
       boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
         dplyr::group_by(times) %>%
