@@ -158,6 +158,11 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
 
   arguments[["id"]] <- "bootstrapID"
 
+  if (method == "timereg") {
+    # Set/Overwrite n.sim = 0 for all the bootstraps:
+    dot.args[["n.sim"]] <- 0
+  }
+
   for (b in 1:boot.n) {
 
     if(progress_bar) {
@@ -193,9 +198,6 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
 
     # Retrieve and summarise coefs under "timereg" implementation
     if (method == "timereg") {
-
-      # Set/Overwrite n.sim = 0 for all the bootstraps:
-      dot.args[["n.sim"]] <- 0
 
       # Aalen's additive hazard model:
       areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(formalArgs(timereg::aalen), names(dot.args))]))
