@@ -156,6 +156,8 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
   # Bootstrapping is performed by id:
   boot.by=id
 
+  arguments[["id"]] <- "bootstrapID"
+
   for (b in 1:boot.n) {
 
     if(progress_bar) {
@@ -188,7 +190,6 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
     # boot.data[[meta$outcome$stopt]] <- resolve.ties(boot.data[[meta$outcome$stopt]], boot.data[[meta$outcome$event]], obstimes)
 
     arguments[["data"]] <- boot.data
-    arguments[["id"]] <- "bootstrapID"
 
     # Retrieve and summarise coefs under "timereg" implementation
     if (method == "timereg") {
