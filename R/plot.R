@@ -35,13 +35,17 @@ ggplot.effect <- function(object,
                           linetype = "dashed",
                           x_label = "Time",
                           y_label = NULL) {
+
+  # Set global variables (called in the pipes below)
+  times <- y <- ymin <- ymax <- group <- effect_type <- NULL
+
   `%>%` <- dplyr::`%>%`
   all_plot_dat <- dplyr::tibble()
 
   # Make sure we can handle both effect objects and list of effect objects
-  if(methods::is(object, "effect")){
+  if(class(object) == "effect") {
     object_list <- list(object)
-  }else{
+  } else{
     object_list <- object
   }
 
