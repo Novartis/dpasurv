@@ -71,12 +71,11 @@ Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, 
 #' @param ... other parameters passed to Aalen's additive hazards regression function "timereg::aalen()"
 #'
 #' @return data.frame with observation times and estimated coefficients for independent variables in "regformula"
+#' @importFrom rlang .data
 #' @export
 #'
 #' @keywords internal
 Areg = function(out.formula, id, data, method, ...) {
-
-  time <- NULL
 
   `%>%` <- dplyr::`%>%`
 
@@ -89,7 +88,7 @@ Areg = function(out.formula, id, data, method, ...) {
     # Gather non-cumulative effect estimates from the timereg::aalen() regression
     aalen.coefs <- aalen.obj$cum[-1,] %>%
       dplyr::as_tibble() %>%
-      dplyr::rename(times = time) %>%
+      dplyr::rename(times = .data$time) %>%
       dplyr::mutate_at(dplyr::vars(-c("times")), function(x) c(x[1],diff(x)))
 
     if (is.matrix(aalen.obj$gamma)) {
