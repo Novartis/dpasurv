@@ -39,7 +39,7 @@ ggplot.effect <- function(object,
   all_plot_dat <- dplyr::tibble()
 
   # Make sure we can handle both effect objects and list of effect objects
-  if(is(object, "effect")){
+  if(methods::is(object, "effect")){
     object_list <- list(object)
   }else{
     object_list <- object
@@ -229,7 +229,7 @@ plot.effect <- function(x, relative=FALSE, ...) {
       args$y <- dat.plot$lower
     }
 
-    base::do.call(lines, args)
+    base::do.call(graphics::lines, args)
 
     if (relative) {
       args$y <- exp(-dat.plot$upper)
@@ -237,7 +237,7 @@ plot.effect <- function(x, relative=FALSE, ...) {
       args$y <- dat.plot$upper
     }
 
-    base::do.call(lines, args)
+    base::do.call(graphics::lines, args)
 
   }
 
