@@ -1,7 +1,7 @@
 Package: dpasurv
 Type: Package
 Title: Dynamic Path Analysis of Survival Data via Aalen's Additive Hazards Model
-Version: 1.0.0
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Matthias",
            family = "Kormaksson",
@@ -27,7 +27,8 @@ Imports:
     tidyr (>= 0.8.3),
     ggplot2 (>= 3.2.0),
     survival (>= 2.44.1.1),
-    timereg (>= 1.9.4)
+    timereg (>= 1.9.4), 
+    methods
 RoxygenNote: 7.2.3
 Suggests: 
     knitr,
