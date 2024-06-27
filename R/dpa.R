@@ -102,7 +102,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
   if (method == "timereg") {
 
     # Aalen's additive hazard model:
-    areg.obj <- do.call(Areg, c(arguments, dot.args[base::intersect(formalArgs(timereg::aalen), names(dot.args))]))
+    areg.obj <- do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(timereg::aalen), names(dot.args))]))
 
     # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
     # at unique observed times. We sum up the coefficients across ties within unique times
@@ -121,7 +121,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
   } else { # Retrieve and summarise coefs under "aareg" implementation
 
     # Aalen's additive hazard model:
-    areg.obj <- do.call(Areg, c(arguments, dot.args[base::intersect(formalArgs(survival::aareg), names(dot.args))]))
+    areg.obj <- do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(survival::aareg), names(dot.args))]))
 
     coefs[["outcome"]] <- areg.obj$coefs %>%
       dplyr::group_by(times) %>%
@@ -200,7 +200,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
     if (method == "timereg") {
 
       # Aalen's additive hazard model:
-      areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(formalArgs(timereg::aalen), names(dot.args))]))
+      areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(timereg::aalen), names(dot.args))]))
 
       # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
       # at unique observed times. We sum up the coefficients across ties within unique times
@@ -220,7 +220,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
     } else { # Retrieve and summarise coefs under "aareg" implementation
 
       # Aalen's additive hazard model:
-      areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(formalArgs(survival::aareg), names(dot.args))]))
+      areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(survival::aareg), names(dot.args))]))
 
       boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
         dplyr::group_by(times) %>%

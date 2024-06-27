@@ -4,7 +4,7 @@
 \alias{Areg}
 \title{Internal Aalen's Additive Hazards Model storing a linear effect estimate for each event time}
 \usage{
-Areg(out.formula, id, data, ...)
+Areg(out.formula, id, data, method, ...)
 }
 \arguments{
 \item{out.formula}{Survival formula for Aalen's additive hazards model.}

@@ -76,6 +76,8 @@ Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, 
 #' @keywords internal
 Areg = function(out.formula, id, data, method, ...) {
 
+  time <- NULL
+
   `%>%` <- dplyr::`%>%`
 
   # Fit Aalen's additive model with timereg package

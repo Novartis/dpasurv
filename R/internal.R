@@ -133,6 +133,8 @@ get.meta <- function(out.formula, mediator.formulas, data) {
 #' @keywords internal
 add.ci <- function(object, alpha=0.05) {
 
+  times <- NULL
+
   `%>%` <- dplyr::`%>%`
 
   # effect names (if factor then n.levels - 1 dummy variables, otherwise same as variable):

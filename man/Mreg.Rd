@@ -24,7 +24,7 @@ Mreg(regformula, obstimes, startt, stopt, event, mediator, dataset, w = 1)
 \item{w}{(optional) weights (not actually used in the default implementation of dynamic path analysis, set to 1)}
 }
 \value{
-data.frame with observation times and estimated coefficients for independet variables in "regformula"
+data.frame with observation times and estimated coefficients for independent variables in "regformula"
 }
 \description{
 Do not call this function on its own

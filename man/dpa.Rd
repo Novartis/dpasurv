@@ -10,6 +10,7 @@ dpa(
   id,
   data,
   boot.n = 100,
+  method = "aareg",
   progress_bar = FALSE,
   ...
 )
@@ -20,16 +21,21 @@ dpa(
 \item{mediator.formulas}{Mediator regression formula (in case of a single mediator), or a list of regression formulas (in case of multiple mediators).
 The formulas must be ordered according to Directed Acyclic Graph Structure (see Details).}
 
-\item{id}{character string indicating which column of 'data' corresponds to the subject ID.}
+\item{id}{character string indicating which column of 'data' corresponds to the subject ID. Bootstrapping will be performed on this id.}
 
 \item{data}{Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with
 any mediators and baseline covariates.}
 
 \item{boot.n}{Number of bootstrap samples.}
 
+\item{method}{The underlying implementation of Aalen's additive regression model. Defaults to "aareg", which relies on the survival::aareg() implementation,
+while method = "timereg" uses the timereg::aalen() implementation.}
+
 \item{progress_bar}{Boolean. If TRUE, show progress bar. Defaults to FALSE.}
 
-\item{...}{other parameters passed to Aalen's additive hazards regression function "timereg::aalen()"}
+\item{...}{other parameters passed to the Aalen's additive hazards model implementation. If method = "timereg", then ... will be passed to
+timereg::aalen(), while if method = "aareg", then ... will be passed to survival::aareg(). If ... contains parameters that don't belong to the formalArgs of
+the corresponding implementation then those parameters will be ignored.}
 }
 \value{
 Object of class `dpa` with following fields:
@@ -45,7 +51,7 @@ track of all variable types and level names in case of factors.}
 Dynamic Path Analysis
 }
 \details{
-\code{dpa} performs Dynamic Path Analysis of a Directed Acyclic Graph. The out.formula
+\code{dpa} performs Dynamic Path Analysis of a Directed Acyclic Graph (DAG). The out.formula
 can have as covariates all mediators listed in mediator.formulas. The mediator.formulas must obey the
 following DAG structure rule: The response of the k-th formula cannot appear as covariate in any of the formulas
 k+1, ..., length(mediator.formulas).
