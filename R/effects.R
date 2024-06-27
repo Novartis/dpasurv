@@ -40,6 +40,9 @@
 #' plot(indirect); abline(h=0, lty=2, col=2)
 effect <- function(formula, object, alpha=0.05) {
 
+  # Set global variables (called in the pipes below)
+  times <- boot.id <- NULL
+
   # set up an empty output object (of class "effect"):
   output <- base::list(coefs = NULL, lower=NULL, upper=NULL, boot.coefs = NULL, label=NULL, formula=formula, scale=NULL, alpha=alpha)
 

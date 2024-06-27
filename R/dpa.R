@@ -59,6 +59,9 @@
 #'
 dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "aareg", progress_bar = FALSE, ...) {
 
+  # Set global variables (called in the pipes below)
+  times <- time.bins <- NULL
+
   `%>%` <- dplyr::`%>%`
 
   # Make sure all categorical variables in data are set as factors:
