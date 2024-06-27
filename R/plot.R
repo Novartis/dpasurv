@@ -43,7 +43,7 @@ ggplot.effect <- function(object,
   all_plot_dat <- dplyr::tibble()
 
   # Make sure we can handle both effect objects and list of effect objects
-  if(class(object) == "effect") {
+  if(base::class(object) == "effect") {
     object_list <- list(object)
   } else{
     object_list <- object
