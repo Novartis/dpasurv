@@ -4,7 +4,7 @@
 \alias{ggplot.effect}
 \title{Plot effects from dynamic path analysis along with bootstrap confidence bands}
 \usage{
-\method{ggplot}{effect}(
+ggplot.effect(
   object,
   relative = FALSE,
   titles = NULL,
@@ -28,7 +28,8 @@ elements in object list}
 
 \item{x_label}{Label for x-axis. Defaults to "Time"}
 
-\item{y_label}{Label for y-axis. Default will be "Cumulative Effect" when object scale is "cumulative", "Effect" otherwise.}
+\item{y_label}{Label for y-axis. Default when object scale is "cumulative" will be "Cumulative Effect" (relative=FALSE) and "Relative survival" (relative=TRUE).
+If object scale is "identity" then the default y_label will be "Effect".}
 }
 \value{
 ggplot object

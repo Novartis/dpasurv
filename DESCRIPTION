@@ -8,33 +8,33 @@ Authors@R:
            family = "Kormaksson",
            role = c("aut", "cre"),
            email = "mk375@cornell.edu"),
-      person(given = "Markus",
-           family = "Lange",
-           role = c("ctb")),
-      person(given = "David",
-           family = "Demanse",
-           role = c("ctb")),
       person(given = "Susanne",
            family = "Strohmaier",
-           role = c("ctb")))
+           role = c("aut"))),
+      person(given = "Markus",
+           family = "Lange",
+           role = c("aut")),
+      person(given = "David",
+           family = "Demanse",
+           role = c("aut"))
 Maintainer: Matthias Kormaksson <mk375@cornell.edu>
 Author: Novartis Pharma AG [cph],
   Matthias Kormaksson [aut, cre],
-  Markus Lange [ctb],
-  David Demanse [ctb],
-  Susanne Strohmaier [ctb]
+  Susanne Strohmaier [aut],
+  Markus Lange [aut],
+  David Demanse [aut]
 Description: Dynamic path analysis with estimation of the corresponding direct, indirect, and total effects, based on Fosen et al. (2006). The main outcome of interest is a counting process from survival analysis (or recurrent events) data. At each time of event, ordinary linear regression is used to estimate the relation between the covariates, while Aalen's additive hazard model is used for the regression of the counting process on the covariates.
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.6.0)
 Imports:
-    dplyr (>= 1.1.0),
-    tidyr (>= 1.3.0),
-    rlang (>= 1.0.6),
-    ggplot2 (>= 3.4.0),
-    survival (>= 3.5-0),
-    timereg (>= 2.0.0), 
+    dplyr (>= 0.8.3),
+    tidyr (>= 0.8.3),
+    rlang (>= 0.4.0),
+    ggplot2 (>= 3.2.0),
+    survival (>= 2.44.1.1),
+    timereg (>= 1.9.4), 
     methods
 RoxygenNote: 7.2.3
 Suggests: 

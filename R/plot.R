@@ -9,7 +9,8 @@
 #' @param yintercept y-intercept of horizontal line. Defaults to 0.
 #' @param linetype type of horinzontal line to plot. Defaults to "dashed".
 #' @param x_label Label for x-axis. Defaults to "Time"
-#' @param y_label Label for y-axis. Default will be "Cumulative Effect" when object scale is "cumulative", "Effect" otherwise.
+#' @param y_label Label for y-axis. Default when object scale is "cumulative" will be "Cumulative Effect" (relative=FALSE) and "Relative survival" (relative=TRUE).
+#' If object scale is "identity" then the default y_label will be "Effect".
 #'
 #' @return ggplot object
 #' @export
@@ -77,7 +78,11 @@ ggplot.effect <- function(object,
 
       # Plot cumulative effects on "outcome", otherwise regular regression effects
       if(object$scale=="cumulative") {
-        plot_dat$ylab <- ifelse(!is.null(y_label), y_label, "Cumulative Effect")
+        if (relative) {
+          plot_dat$ylab <- ifelse(!is.null(y_label), y_label, "Relative Survival")
+        } else {
+          plot_dat$ylab <- ifelse(!is.null(y_label), y_label, "Cumulative Effect")
+        }
       } else {
         plot_dat$ylab <- ifelse(!is.null(y_label), y_label, "Effect")
       }
@@ -116,7 +121,7 @@ ggplot.effect <- function(object,
   plot_object <- ggplot2::ggplot(data = all_plot_dat,
                                  ggplot2::aes(x = times, y = y, ymin = ymin, ymax = ymax)) +
     ggplot2::geom_ribbon(fill = "azure3") +
-    ggplot2::geom_line() +
+    ggplot2::geom_step() +
     ggplot2::ylab(unique(all_plot_dat$ylab)) +
     ggplot2::xlab(x_label) +
     ggplot2::geom_hline(yintercept = yintercept, color = "red", linetype = linetype) +
@@ -174,7 +179,7 @@ plot.effect <- function(x, relative=FALSE, ...) {
   for (ii in 1:base::length(effect.names)) {
 
     # Request user input: "Hit <Return> for next plot"
-    if (ii > 1) grDevices::devAskNewPage(ask = TRUE)
+    # if (ii > 1) grDevices::devAskNewPage(ask = TRUE)
 
     args <- base::list(...)
 
@@ -222,7 +227,7 @@ plot.effect <- function(x, relative=FALSE, ...) {
     }
 
     # plot estimated effect:
-    base::do.call(plot, args)
+    base::do.call(graphics::plot, args)
 
     # Add confidence band to plot:
     args$col = "grey"
@@ -246,7 +251,7 @@ plot.effect <- function(x, relative=FALSE, ...) {
   }
 
   # Deactivate Hit Return for next plot:
-  if (ii > 1)
-    grDevices::devAskNewPage(ask = FALSE)
+  #if (ii > 1)
+  #  grDevices::devAskNewPage(ask = FALSE)
 
 }
