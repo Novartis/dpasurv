@@ -10,13 +10,13 @@ Authors@R:
            email = "mk375@cornell.edu"),
       person(given = "Susanne",
            family = "Strohmaier",
-           role = c("aut"))),
+           role = c("aut")),
       person(given = "Markus",
            family = "Lange",
            role = c("aut")),
       person(given = "David",
            family = "Demanse",
-           role = c("aut"))
+           role = c("aut")))
 Maintainer: Matthias Kormaksson <mk375@cornell.edu>
 Author: Novartis Pharma AG [cph],
   Matthias Kormaksson [aut, cre],
