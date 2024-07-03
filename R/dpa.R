@@ -59,9 +59,6 @@
 #'
 dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "aareg", progress_bar = FALSE, ...) {
 
-  # Set global variables (called in the pipes below)
-  times <- time.bins <- NULL
-
   `%>%` <- dplyr::`%>%`
 
   # Make sure all categorical variables in data are set as factors:
@@ -114,11 +111,11 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
     # survival times. So this strategy also works for cumulative indirect effects.
     coefs[["outcome"]] <- areg.obj$coefs %>%
       dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
-      dplyr::group_by(time.bins) %>%
-      dplyr::mutate(times = times[1L]) %>%
+      dplyr::group_by(.data$time.bins) %>%
+      dplyr::mutate(times = .data$times[1L]) %>%
       dplyr::ungroup() %>%
-      dplyr::select(-time.bins) %>%
-      dplyr::group_by(times) %>%
+      dplyr::select(-.data$time.bins) %>%
+      dplyr::group_by(.data$times) %>%
       dplyr::summarise_all(sum)
 
   } else { # Retrieve and summarise coefs under "aareg" implementation
@@ -127,7 +124,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
     areg.obj <- do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(survival::aareg), names(dot.args))]))
 
     coefs[["outcome"]] <- areg.obj$coefs %>%
-      dplyr::group_by(times) %>%
+      dplyr::group_by(.data$times) %>%
       dplyr::summarise_all(sum)
 
   }
@@ -212,11 +209,11 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
       # survival times. So this strategy also works for cumulative indirect effects.
       boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
         dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
-        dplyr::group_by(time.bins) %>%
-        dplyr::mutate(times = times[1L]) %>%
+        dplyr::group_by(.data$time.bins) %>%
+        dplyr::mutate(times = .data$times[1L]) %>%
         dplyr::ungroup() %>%
-        dplyr::select(-time.bins) %>%
-        dplyr::group_by(times) %>%
+        dplyr::select(-.data$time.bins) %>%
+        dplyr::group_by(.data$times) %>%
         dplyr::summarise_all(sum) %>%
         dplyr::mutate(boot.id = b)
 
@@ -226,7 +223,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
       areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(survival::aareg), names(dot.args))]))
 
       boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
-        dplyr::group_by(times) %>%
+        dplyr::group_by(.data$times) %>%
         dplyr::summarise_all(sum) %>%
         dplyr::mutate(boot.id = b)
 

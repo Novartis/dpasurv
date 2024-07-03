@@ -40,9 +40,6 @@
 #' plot(indirect); abline(h=0, lty=2, col=2)
 effect <- function(formula, object, alpha=0.05) {
 
-  # Set global variables (called in the pipes below)
-  times <- boot.id <- NULL
-
   # set up an empty output object (of class "effect"):
   output <- base::list(coefs = NULL, lower=NULL, upper=NULL, boot.coefs = NULL, label=NULL, formula=formula, scale=NULL, alpha=alpha)
 
@@ -80,12 +77,12 @@ effect <- function(formula, object, alpha=0.05) {
 
     for (ii in 3:base::length(path.variables)) {
       output$coefs <- output$coefs %>%
-        dplyr::mutate_at(dplyr::vars(-times), function(x) x*(object$coefs[[path.variables[ii]]] %>%
+        dplyr::mutate_at(dplyr::vars(-.data$times), function(x) x*(object$coefs[[path.variables[ii]]] %>%
                                                                dplyr::select(dplyr::one_of(path.variables[ii-1])) %>%
                                                                dplyr::pull()))
 
       output$boot.coefs <- output$boot.coefs %>%
-        dplyr::mutate_at(dplyr::vars(-boot.id, -times), function(x) x*(object$boot.coefs[[path.variables[ii]]] %>%
+        dplyr::mutate_at(dplyr::vars(-.data$boot.id, -.data$times), function(x) x*(object$boot.coefs[[path.variables[ii]]] %>%
                                                                          dplyr::select(dplyr::one_of(path.variables[ii-1])) %>%
                                                                          dplyr::pull()))
     }
@@ -107,7 +104,7 @@ effect <- function(formula, object, alpha=0.05) {
     dplyr::mutate_at(dplyr::vars(dplyr::one_of(cols)), fun)
 
   output$boot.coefs <- output$boot.coefs %>%
-    dplyr::group_by(boot.id) %>%
+    dplyr::group_by(.data$boot.id) %>%
     dplyr::mutate_at(dplyr::vars(dplyr::one_of(cols)), fun) %>%
     dplyr::ungroup()
 

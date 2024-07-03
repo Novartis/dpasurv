@@ -133,8 +133,6 @@ get.meta <- function(out.formula, mediator.formulas, data) {
 #' @keywords internal
 add.ci <- function(object, alpha=0.05) {
 
-  times <- NULL
-
   `%>%` <- dplyr::`%>%`
 
   # effect names (if factor then n.levels - 1 dummy variables, otherwise same as variable):
@@ -142,7 +140,7 @@ add.ci <- function(object, alpha=0.05) {
 
   # Add confidence bands:
   boot.coefs <- object$boot.coefs %>%
-    dplyr::group_by(times)
+    dplyr::group_by(.data$times)
 
   object$lower <- boot.coefs %>%
     dplyr::summarise_at(dplyr::vars(dplyr::one_of(effect.names)), function(x) stats::quantile(x, alpha/2))
