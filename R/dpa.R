@@ -110,7 +110,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
     # will only be applied at the unique event times and would be constant across tied
     # survival times. So this strategy also works for cumulative indirect effects.
     coefs[["outcome"]] <- areg.obj$coefs %>%
-      dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
+      dplyr::mutate(time.bins = base::cut(.data$times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
       dplyr::group_by(.data$time.bins) %>%
       dplyr::mutate(times = .data$times[1L]) %>%
       dplyr::ungroup() %>%
@@ -208,7 +208,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "
       # will only be applied at the unique event times and would be constant across tied
       # survival times. So this strategy also works for cumulative indirect effects.
       boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
-        dplyr::mutate(time.bins = base::cut(times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
+        dplyr::mutate(time.bins = base::cut(.data$times, breaks = c(obstimes, Inf), include.lowest=FALSE, labels = obstimes, right=FALSE)) %>%
         dplyr::group_by(.data$time.bins) %>%
         dplyr::mutate(times = .data$times[1L]) %>%
         dplyr::ungroup() %>%
