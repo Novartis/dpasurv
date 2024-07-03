@@ -37,9 +37,6 @@ ggplot.effect <- function(object,
                           x_label = "Time",
                           y_label = NULL) {
 
-  # Set global variables (called in the pipes below)
-  times <- y <- ymin <- ymax <- group <- effect_type <- NULL
-
   `%>%` <- dplyr::`%>%`
   all_plot_dat <- dplyr::tibble()
 
@@ -119,7 +116,7 @@ ggplot.effect <- function(object,
   # Now that all data has been created, do the actual plotting
 
   plot_object <- ggplot2::ggplot(data = all_plot_dat,
-                                 ggplot2::aes(x = times, y = y, ymin = ymin, ymax = ymax)) +
+                                 ggplot2::aes(x = .data$times, y = .data$y, ymin = .data$ymin, ymax = .data$ymax)) +
     ggplot2::geom_ribbon(fill = "azure3") +
     ggplot2::geom_step() +
     ggplot2::ylab(unique(all_plot_dat$ylab)) +
@@ -129,11 +126,11 @@ ggplot.effect <- function(object,
 
   if(dplyr::n_distinct(all_plot_dat$group)>1){
     plot_object <- plot_object +
-      ggplot2::facet_grid(rows = ggplot2::vars(group),
-                          cols = ggplot2::vars(effect_type))
+      ggplot2::facet_grid(rows = ggplot2::vars(.data$group),
+                          cols = ggplot2::vars(.data$effect_type))
   }else{
     plot_object <- plot_object +
-      ggplot2::facet_grid(cols = ggplot2::vars(effect_type))
+      ggplot2::facet_grid(cols = ggplot2::vars(.data$effect_type))
   }
 
   plot_object
