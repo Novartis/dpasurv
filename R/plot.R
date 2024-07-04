@@ -30,8 +30,8 @@
 #' ggplot.effect(list(direct, indirect, total))
 #'
 ggplot.effect <- function(object,
-                          relative=FALSE,
-                          titles =NULL,
+                          relative = FALSE,
+                          titles = NULL,
                           yintercept = 0,
                           linetype = "dashed",
                           x_label = "Time",
@@ -117,11 +117,13 @@ ggplot.effect <- function(object,
 
   plot_object <- ggplot2::ggplot(data = all_plot_dat,
                                  ggplot2::aes(x = .data$times, y = .data$y, ymin = .data$ymin, ymax = .data$ymax)) +
-    ggplot2::geom_ribbon(fill = "azure3") +
+    #ggplot2::geom_ribbon(fill = "azure3") +
+    ggplot2::geom_hline(yintercept = yintercept, color = "red", linetype = linetype) +
     ggplot2::geom_step() +
+    ggplot2::geom_step(ggplot2::aes(y = .data$ymin), color="grey") +
+    ggplot2::geom_step(ggplot2::aes(y = .data$ymax), color="grey") +
     ggplot2::ylab(unique(all_plot_dat$ylab)) +
     ggplot2::xlab(x_label) +
-    ggplot2::geom_hline(yintercept = yintercept, color = "red", linetype = linetype) +
     ggplot2::theme_bw()
 
   if(dplyr::n_distinct(all_plot_dat$group)>1){
