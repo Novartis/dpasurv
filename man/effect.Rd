@@ -40,12 +40,12 @@ library(dpasurv)
 
 data(simdata)
 
-s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=100)
+set.seed(1)
 
-# Direct effect of x on outcome:
+s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
+
 direct <- effect(x ~ outcome, s)
-# Indirect effect of x on outcome (mediated through M):
 indirect <- effect(x ~ M ~ outcome, s)
-plot(direct); abline(h=0, lty=2, col=2)
-plot(indirect); abline(h=0, lty=2, col=2)
+total <- sum(direct, indirect)
+
 }

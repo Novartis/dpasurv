@@ -20,7 +20,9 @@
 #'
 #' data(simdata)
 #'
-#' s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=100)
+#' set.seed(1)
+#'
+#' s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
 #'
 #' direct <- effect(x ~ outcome, s)
 #' indirect <- effect(x ~ M ~ outcome, s)
@@ -60,11 +62,15 @@ ggplot.effect <- function(object,
       # data to be plotted
       plot_dat <- object$coefs %>% dplyr::select(dplyr::one_of(c("times", effect.names[ii]))) %>%
         dplyr::inner_join(object$lower %>%
-                            dplyr::select(dplyr::one_of(c("times", effect.names[ii]))) %>%
-                            dplyr::rename(lower=dplyr::contains(effect.names[ii])), by="times") %>%
+                            dplyr::select(dplyr::one_of(c("times"))) %>%
+                            dplyr::bind_cols(object$lower %>%
+                                               dplyr::select(dplyr::one_of(c(effect.names[ii]))) %>%
+                                               dplyr::rename(lower=dplyr::contains(effect.names[ii]))), by="times") %>%
         dplyr::inner_join(object$upper %>%
-                            dplyr::select(dplyr::one_of(c("times", effect.names[ii]))) %>%
-                            dplyr::rename(upper=dplyr::contains(effect.names[ii])), by="times")
+                            dplyr::select(dplyr::one_of(c("times"))) %>%
+                            dplyr::bind_cols(object$upper %>%
+                                               dplyr::select(dplyr::one_of(c(effect.names[ii]))) %>%
+                                               dplyr::rename(upper=dplyr::contains(effect.names[ii]))), by="times")
 
       plot_dat$group <- effect.names[ii]
 
@@ -156,7 +162,9 @@ ggplot.effect <- function(object,
 #'
 #' data(simdata)
 #'
-#' s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=100)
+#' set.seed(1)
+#'
+#' s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
 #'
 #' direct <- effect(x ~ outcome, s)
 #' indirect <- effect(x ~ M ~ outcome, s)

@@ -4,7 +4,7 @@
 \alias{ggplot.effect}
 \title{Plot effects from dynamic path analysis along with bootstrap confidence bands}
 \usage{
-ggplot.effect(
+\method{ggplot}{effect}(
   object,
   relative = FALSE,
   titles = NULL,
@@ -42,7 +42,9 @@ library(dpasurv)
 
 data(simdata)
 
-s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=100)
+set.seed(1)
+
+s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
 
 direct <- effect(x ~ outcome, s)
 indirect <- effect(x ~ M ~ outcome, s)
