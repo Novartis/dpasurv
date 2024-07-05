@@ -4,8 +4,8 @@
 #' M refers to the longitudinal mediator values. The triplet (start, stop, event)
 #' corresponds to the time-to-event data in the required (start,stop] format.
 #'
-#' @format A data frame with the following variables: \code{subject}, \code{x},
-#' \code{dose} (factors), and \code{M}, \code{start}, \code{stop}, \code{event} (numeric).
+#' @format A data frame with the following variables: \code{subject} (fct), \code{x} (dbl),
+#' \code{dose} (fct), \code{M} (dbl), \code{start} (dbl), \code{stop} (dbl), \code{event} (dbl).
 #'
 #' @name simdata
 #' @docType data
