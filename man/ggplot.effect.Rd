@@ -4,7 +4,7 @@
 \alias{ggplot.effect}
 \title{Plot effects from dynamic path analysis along with bootstrap confidence bands}
 \usage{
-\method{ggplot}{effect}(
+ggplot.effect(
   object,
   relative = FALSE,
   titles = NULL,
