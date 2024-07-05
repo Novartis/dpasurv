@@ -1,9 +1,4 @@
-##############################################################################
-# Load packages
-##############################################################################
-
-library(dplyr, warn.conflicts = FALSE)
-library(tidyr)
+`%>%` <- dplyr::`%>%`
 
 ##############################################################################
 # Data generating mechanism
@@ -66,11 +61,11 @@ sim_trials <- function(id,
     MASS::mvrnorm(n = design$n_patients, rep(0, length(design$time_grid)), Sigma = Sigma)
   M_noise <- (M_true + noise)
   # Not all the values we generate for M will actually be measured
-  M_measured <- M_noise[, measurement_weeks_index] %>% data.frame() %>% as_tibble()
+  M_measured <- M_noise[, measurement_weeks_index] %>% data.frame() %>% tibble::as_tibble()
   # M_measured <- M_noise
   names(M_measured) <- paste0("M", design$measurement_weeks)
   # combine into a data set
-  sim_dat <- bind_cols(
+  sim_dat <- dplyr::bind_cols(
     subject = 1:design$n_patients,
     x = x,
     M0 = M_intercept + parameters$alpha_0[1],
@@ -84,7 +79,7 @@ sim_trials <- function(id,
       nrow = design$n_patients
     )
   M_eff_on_haz_mat <- (M_noise * M_eff_on_haz)
-  M_eff_on_haz_mat <- as_tibble(data.frame(M_noise * parameters$M_eff_on_haz))
+  M_eff_on_haz_mat <- tibble::as_tibble(data.frame(M_noise * parameters$M_eff_on_haz))
 
   # We now have everything to define the hazard matrix
   hazard_mat <-
@@ -97,11 +92,11 @@ sim_trials <- function(id,
   names(hazard_mat) <- paste0("week_", design$time_grid)
   M_at_study_end <- paste0("M", tail(design$measurement_weeks, 1))
   sim_dat_long <-
-    pivot_longer(sim_dat, cols = starts_with("M"), names_to = "M") %>%
-    filter(M != M_at_study_end) %>% # last mediator measurement is irrelevant
-    mutate(week = rep(c(0, design$measurement_weeks[-length(design$measurement_weeks)]), design$n_patients)) %>%
-    select(-M) %>%
-    rename(M = value)
+    tidyr::pivot_longer(sim_dat, cols = starts_with("M"), names_to = "M") %>%
+    dplyr::filter(M != M_at_study_end) %>% # last mediator measurement is irrelevant
+    dplyr::mutate(week = rep(c(0, design$measurement_weeks[-length(design$measurement_weeks)]), design$n_patients)) %>%
+    dplyr::select(-M) %>%
+    dplyr::rename(M = value)
 
   # For each patient, we now have one hazard value for each week
   # This approximates the probability of having an event in that week
@@ -111,14 +106,14 @@ sim_trials <- function(id,
 
   # Which patients have an event, and when?
   identify_event <- function(x){
-    if(sum(x)==0) return(tibble(event = 0, time = tail(design$time_grid,1))) # no event
-    return(tibble(event = 1, time = design$time_grid[min(which(x==1))]))
+    if(sum(x)==0) return(tibble::tibble(event = 0, time = tail(design$time_grid,1))) # no event
+    return(tibble::tibble(event = 1, time = design$time_grid[min(which(x==1))]))
   }
 
   event_times_per_patient <-
     apply(event_table, 1, identify_event) %>%
-    bind_rows() %>%
-    mutate(subject = 1:design$n_patients)
+    dplyr::bind_rows() %>%
+    dplyr::mutate(subject = 1:design$n_patients)
 
   ############################################################################
   # Censoring
@@ -132,30 +127,30 @@ sim_trials <- function(id,
     pmin(censoring_times, design$measurement_weeks[length(design$measurement_weeks)])
 
   event_times_per_patient <- event_times_per_patient %>%
-    mutate(
+    dplyr::mutate(
       event = ifelse(censoring_times <= time, 0, event),
       time = ifelse(censoring_times <= time, censoring_times, time)
     )
 
 
   temp <-
-    tmerge(
+    survival::tmerge(
       event_times_per_patient,
       event_times_per_patient,
       id = subject,
       event = event(time, event)
     )
   sim_dat_long <-
-    tmerge(
+    survival::tmerge(
       temp,
       sim_dat_long,
       id = subject,
       M = tdc(week, M),
       x = tdc(week, x)
     ) %>% data.frame() %>%
-    as_tibble()
+    tibble::as_tibble()
 
-  list(sim_dat = sim_dat_long %>% select(subject, x, tstart, tstop, M, event) %>% rename(start=tstart,stop=tstop),
+  list(sim_dat = sim_dat_long %>% dplyr::select(subject, x, tstart, tstop, M, event) %>% dplyr::rename(start=tstart,stop=tstop),
        baseline_hazard = bh)
 }
 
@@ -243,10 +238,10 @@ parameters = list(alpha_0 = alpha_0,
 # Create dataset:
 set.seed(254)
 simdata <- sim_trials(1, design=design, parameters=parameters)$sim_dat %>%
-  mutate(dose = factor(ifelse(x==0, "ctrl", ifelse(x==1, "low", "high")), levels=c("ctrl", "low", "high")),
-         x = factor(ifelse(x==0, "ctrl", "trt")),
-         stop = ifelse(event==1, stop - round(runif(n(),min=0, max=1), 2), stop),
+  dplyr::mutate(dose = factor(ifelse(x==0, "ctrl", ifelse(x==1, "low", "high")), levels=c("ctrl", "low", "high")),
+         x = ifelse(x==0, x, 1),
+         stop = ifelse(event==1, stop - round(runif(dplyr::n(),min=0, max=1), 2), stop),
          subject = factor(subject)) %>%
-  relocate(dose, M, .after=x)
+  dplyr::relocate(dose, M, .after=x)
 
 usethis::use_data(simdata, overwrite = TRUE)

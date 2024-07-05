@@ -9,8 +9,8 @@ The columns x and dose correspond to a treatment and dose variable respectively,
 M refers to the longitudinal mediator values. The triplet (start, stop, event)
 corresponds to the time-to-event data in the required (start,stop] format.}
 \format{
-A data frame with the following variables: \code{subject}, \code{x},
-\code{dose} (factors), and \code{M}, \code{start}, \code{stop}, \code{event} (numeric).
+A data frame with the following variables: \code{subject} (fct), \code{x} (dbl),
+\code{dose} (fct), \code{M} (dbl), \code{start} (dbl), \code{stop} (dbl), \code{event} (dbl).
 }
 \description{
 This is a simulated data set in the (start,stop] format. The subject column
