@@ -1,10 +1,13 @@
 ---
 title: "ggplot plotting functionality"
+author: 
+   - Markus Lange
+date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{ggplot plotting functionality}
+  \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 <style>
