@@ -47,7 +47,7 @@
 <span>  <span class="va">id</span>,</span>
 <span>  <span class="va">data</span>,</span>
 <span>  boot.n <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"aareg"</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"timereg"</span>,</span>
 <span>  progress_bar <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -80,8 +80,8 @@ any mediators and baseline covariates.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>The underlying implementation of Aalen's additive regression model. Defaults to "aareg", which relies on the survival::aareg() implementation,
-while method = "timereg" uses the timereg::aalen() implementation.</p></dd>
+<dd><p>The underlying implementation of Aalen's additive regression model. Defaults to "timereg", which relies on the timereg::aalen() implementation,
+while method = "aareg" uses the survival::aareg() implementation.</p></dd>
 
 
 <dt id="arg-progress-bar">progress_bar<a class="anchor" aria-label="anchor" href="#arg-progress-bar"></a></dt>
@@ -126,23 +126,32 @@ k+1, ..., length(mediator.formulas).</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Perform dynamic path analysis:</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">dpa</span><span class="op">(</span><span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">start</span>,<span class="va">stop</span>,<span class="va">event</span><span class="op">)</span><span class="op">~</span><span class="va">M</span><span class="op">+</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">M</span><span class="op">~</span><span class="va">x</span><span class="op">)</span>, id<span class="op">=</span><span class="st">"subject"</span>, data<span class="op">=</span><span class="va">simdata</span>, boot.n<span class="op">=</span><span class="fl">50</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">dpa</span><span class="op">(</span><span class="fu">Surv</span><span class="op">(</span><span class="va">start</span>,<span class="va">stop</span>,<span class="va">event</span><span class="op">)</span><span class="op">~</span><span class="va">M</span><span class="op">+</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">M</span><span class="op">~</span><span class="va">x</span><span class="op">)</span>, id<span class="op">=</span><span class="st">"subject"</span>, data<span class="op">=</span><span class="va">simdata</span>, boot.n<span class="op">=</span><span class="fl">50</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in Surv(start, stop, event):</span> could not find function "Surv"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Calculate cumulative direct, indirect, and total effects:</span></span></span>
 <span class="r-in"><span><span class="va">direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="effect.html">effect</a></span><span class="op">(</span><span class="va">x</span> <span class="op">~</span> <span class="va">outcome</span>, <span class="va">s</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 's' not found</span>
 <span class="r-in"><span><span class="va">indirect</span> <span class="op">&lt;-</span> <span class="fu"><a href="effect.html">effect</a></span><span class="op">(</span><span class="va">x</span> <span class="op">~</span> <span class="va">M</span> <span class="op">~</span> <span class="va">outcome</span>, <span class="va">s</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 's' not found</span>
 <span class="r-in"><span><span class="va">total</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">direct</span>, <span class="va">indirect</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'direct' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot the effects using basic graphics:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">direct</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span>, lty<span class="op">=</span><span class="fl">2</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'direct' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...):</span> plot.new has not been called yet</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">indirect</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span>, lty<span class="op">=</span><span class="fl">2</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'indirect' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...):</span> plot.new has not been called yet</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">total</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span>, lty<span class="op">=</span><span class="fl">2</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="dpa-1.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'total' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...):</span> plot.new has not been called yet</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot the effects using ggplot2 graphics:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="ggplot.effect.html">ggplot.effect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">direct</span>, <span class="va">indirect</span>, <span class="va">total</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="dpa-2.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'direct' not found</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
