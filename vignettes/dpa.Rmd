@@ -27,6 +27,8 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(dpasurv)
+library(survival)
+library(ggplot2)
 ```
 
 ## 1. Introduction
