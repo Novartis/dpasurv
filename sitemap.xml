@@ -1,66 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/404.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/articles/dpa.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/articles/ggplot_demo.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/authors.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/index.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/Areg.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/Mreg.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/add.ci.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/check.dag.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/dpa.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/effect.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/find.variables.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/get.meta.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/ggplot.effect.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/plot.effect.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/resolve.ties.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/simdata.html</loc>
-  </url>
-  <url>
-    <loc>http://opensource.nibr.com/dpasurv/reference/sum.effect.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>http://opensource.nibr.com/dpasurv/404.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/LICENSE-text.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/articles/dpa.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/articles/ggplot_demo.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/articles/index.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/authors.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/index.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/Areg.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/Mreg.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/add.ci.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/check.dag.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/dpa.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/effect.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/find.variables.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/get.meta.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/ggplot.effect.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/index.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/plot.effect.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/resolve.ties.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/simdata.html</loc></url>
+<url><loc>http://opensource.nibr.com/dpasurv/reference/sum.effect.html</loc></url>
 </urlset>
+
