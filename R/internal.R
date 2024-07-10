@@ -184,3 +184,14 @@ resolve.ties <- function(stopt, event, obstimes) {
 
 }
 
+#' Wrapper function for survival::Surv
+#'
+#' @param ... parameters passed to survival::Surv
+#'
+#' @return object of class survival::Surv
+#' @export
+#'
+#' @keywords internal
+Surv <- function(...) {
+  return(survival::Surv(...))
+}

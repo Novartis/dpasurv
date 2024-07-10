@@ -17,7 +17,6 @@
 #'
 #' @examples
 #' library(dpasurv)
-#' library(survival)
 #'
 #' data(simdata)
 #'
@@ -160,7 +159,6 @@ ggplot.effect <- function(object,
 #'
 #' @examples
 #' library(dpasurv)
-#' library(survival)
 #'
 #' data(simdata)
 #'

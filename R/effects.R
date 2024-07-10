@@ -27,7 +27,6 @@
 #'
 #' @examples
 #' library(dpasurv)
-#' library(survival)
 #'
 #' data(simdata)
 #'
@@ -132,7 +131,6 @@ effect <- function(formula, object, alpha=0.05) {
 #'
 #' @examples
 #' library(dpasurv)
-#' library(survival)
 #'
 #' data(simdata)
 #'
