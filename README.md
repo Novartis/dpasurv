@@ -28,7 +28,7 @@ A vignette on how to use the *dpasurv* package can be found [here](https://opens
 library(dpasurv)
 
 # Perform dynamic path analysis
-analysis <- dpa(survival::Surv(start, stop, event) ~ M + x, list(M ~ x), id = "subject", data = simdata, boot.n = 500)
+analysis <- dpa(Surv(start, stop, event) ~ M + x, list(M ~ x), id = "subject", data = simdata, boot.n = 500)
 
 # Extract direct, indirect and total effect
 direct <- effect(x ~ outcome, analysis, alpha=0.05)
@@ -66,6 +66,6 @@ If you publish results obtained from the dpasurv package, please cite the above 
 ## Code authors
 
 - Matthias Kormaksson, matthias-1.kormaksson_ext@novartis.com (maintainer)
+- Susanne Strohmaier, susanne.strohmaier@meduniwien.ac.at
 - Markus Lange, markus.lange@novartis.com
 - David Demanse, david.demanse@novartis.com
-- Susanne Strohmaier, susanne.strohmaier@meduniwien.ac.at
