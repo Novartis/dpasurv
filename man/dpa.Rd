@@ -9,7 +9,7 @@ dpa(
   mediator.formulas,
   id,
   data,
-  boot.n = 100,
+  boot.n = 200,
   method = "timereg",
   progress_bar = FALSE,
   ...
@@ -64,7 +64,9 @@ data(simdata)
 set.seed(1)
 
 # Perform dynamic path analysis:
-s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
+# We set boot.n=30 for the example to run fast, should be set large enough
+# so that results don't change meaningfully for different seeds.
+s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=30)
 
 # Calculate cumulative direct, indirect, and total effects:
 direct <- effect(x ~ outcome, s)
