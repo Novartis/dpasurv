@@ -28,11 +28,11 @@ A vignette on how to use the *dpasurv* package can be found [here](https://opens
 library(dpasurv)
 
 # Perform dynamic path analysis
-analysis <- dpa(Surv(start, stop, event) ~ M + x, list(M ~ x), id = "subject", data = simdata, boot.n = 500)
+s <- dpa(Surv(start, stop, event) ~ M + x, list(M ~ x), id = "subject", data = simdata, boot.n = 500)
 
 # Extract direct, indirect and total effect
-direct <- effect(x ~ outcome, analysis, alpha=0.05)
-indirect <- effect(x ~ M ~ outcome, analysis, alpha=0.05)
+direct <- effect(x ~ outcome, s, alpha=0.05)
+indirect <- effect(x ~ M ~ outcome, s, alpha=0.05)
 total <- sum(direct, indirect)
 
 # Plot the results
