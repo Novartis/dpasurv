@@ -142,11 +142,12 @@ add.ci <- function(object, alpha=0.05) {
   boot.coefs <- object$boot.coefs %>%
     dplyr::group_by(.data$times)
 
+  # The cumulative sum may be NA especially for later time points due to rank deficient design matrices
   object$lower <- boot.coefs %>%
-    dplyr::summarise_at(dplyr::vars(dplyr::one_of(effect.names)), function(x) stats::quantile(x, alpha/2))
+    dplyr::summarise_at(dplyr::vars(dplyr::one_of(effect.names)), function(x) stats::quantile(x, alpha/2, na.rm=TRUE))
 
   object$upper <- boot.coefs %>%
-    dplyr::summarise_at(dplyr::vars(dplyr::one_of(effect.names)), function(x) stats::quantile(x, 1-alpha/2))
+    dplyr::summarise_at(dplyr::vars(dplyr::one_of(effect.names)), function(x) stats::quantile(x, 1-alpha/2, na.rm=TRUE))
 
   return(object)
 

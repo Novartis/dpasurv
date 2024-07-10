@@ -7,8 +7,8 @@
 #' @param data Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with
 #' any mediators and baseline covariates.
 #' @param boot.n Number of bootstrap samples.
-#' @param method The underlying implementation of Aalen's additive regression model. Defaults to "aareg", which relies on the survival::aareg() implementation,
-#' while method = "timereg" uses the timereg::aalen() implementation.
+#' @param method The underlying implementation of Aalen's additive regression model. Defaults to "timereg", which relies on the timereg::aalen() implementation,
+#' while method = "aareg" uses the survival::aareg() implementation.
 #' @param progress_bar Boolean. If TRUE, show progress bar. Defaults to FALSE.
 #' @param ... other parameters passed to the Aalen's additive hazards model implementation. If method = "timereg", then ... will be passed to
 #' timereg::aalen(), while if method = "aareg", then ... will be passed to survival::aareg(). If ... contains parameters that don't belong to the formalArgs of
@@ -37,7 +37,7 @@
 #' set.seed(1)
 #'
 #' # Perform dynamic path analysis:
-#' s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
+#' s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
 #'
 #' # Calculate cumulative direct, indirect, and total effects:
 #' direct <- effect(x ~ outcome, s)
@@ -53,7 +53,7 @@
 #' # Plot the effects using ggplot2 graphics:
 #' ggplot.effect(list(direct, indirect, total))
 #'
-dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "aareg", progress_bar = FALSE, ...) {
+dpa <- function(out.formula, mediator.formulas, id, data, boot.n=100, method = "timereg", progress_bar = FALSE, ...) {
 
   `%>%` <- dplyr::`%>%`
 
