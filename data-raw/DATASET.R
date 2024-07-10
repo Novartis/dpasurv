@@ -187,7 +187,7 @@ e_0_M <- 6.8 # mean value of M for control patients (and at time = 0 for patient
 e_max_M <- 3.7/2 # max treatment effect, reached as time approaches infinity
 et_50_M <- 30 # time at which half of the treatment effect is achieved
 
-M_eff_on_haz <- rep(0.00045, length(time_grid))
+M_eff_on_haz <- rep(0.001, length(time_grid)) # old rep(0.00045, length(time_grid))
 
 alpha_0 <- f_constant(t=time_grid, c=e_0_M) # Mediator value for patients on control
 alpha_1 <- f_emax(t=time_grid, e_max=e_max_M, et_50=et_50_M, hill=1) # alpha_0 + alpha_1 yields mediator value for patients on experimental
@@ -201,7 +201,7 @@ M_noise_sd <- sqrt(0.05)
 #############################################################################
 
 e_0_X <- 0 # Impact of treatment on hazard at time 0
-e_max_X <- -.007/2 # treatment effect, reached as time approaches infinity
+e_max_X <- -.005 # treatment effect, reached as time approaches infinity (old e_max_X = -.007/2)
 et_50_X <- 30 # time at which half of the treatment effect is achieved
 h_X <- 2
 
@@ -240,6 +240,7 @@ set.seed(254)
 simdata <- sim_trials(1, design=design, parameters=parameters)$sim_dat %>%
   dplyr::mutate(dose = factor(ifelse(x==0, "ctrl", ifelse(x==1, "low", "high")), levels=c("ctrl", "low", "high")),
          x = ifelse(x==0, x, 1),
+         M = round(M, 2),
          stop = ifelse(event==1, stop - round(runif(dplyr::n(),min=0, max=1), 2), stop),
          subject = factor(subject)) %>%
   dplyr::relocate(dose, M, .after=x)

@@ -25,6 +25,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(dpasurv)
+library(survival)
 ```
 
 
@@ -33,14 +34,14 @@ library(dpasurv)
 ```{r}
 data(simdata)
 
-s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=100)
+s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=100)
 
 direct <- effect(x ~ outcome, s)
 indirect <- effect(x ~ M ~ outcome, s)
 total <- sum(direct, indirect)
 
 # Multiple treatment arms:
-s2 <- dpa(survival::Surv(start,stop,event)~M+dose, list(M~dose), id="subject", data=simdata, boot.n=100)
+s2 <- dpa(Surv(start,stop,event)~M+dose, list(M~dose), id="subject", data=simdata, boot.n=100)
 
 direct2 <- effect(dose ~ outcome, s2)
 indirect2 <- effect(dose ~ M ~ outcome, s2)

@@ -32,7 +32,7 @@
 #'
 #' set.seed(1)
 #'
-#' s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
+#' s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
 #'
 #' direct <- effect(x ~ outcome, s)
 #' indirect <- effect(x ~ M ~ outcome, s)
@@ -136,7 +136,7 @@ effect <- function(formula, object, alpha=0.05) {
 #'
 #' set.seed(1)
 #'
-#' s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
+#' s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
 #'
 #' direct <- effect(x ~ outcome, s)
 #' indirect <- effect(x ~ M ~ outcome, s)
