@@ -39,6 +39,7 @@ plotting method for class "effect"
 }
 \examples{
 library(dpasurv)
+library(survival)
 
 data(simdata)
 

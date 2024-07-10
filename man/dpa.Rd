@@ -58,6 +58,7 @@ k+1, ..., length(mediator.formulas).
 }
 \examples{
 library(dpasurv)
+library(survival)
 
 data(simdata)
 

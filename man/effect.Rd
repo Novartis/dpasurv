@@ -37,6 +37,7 @@ effect estimation method for class "dpa"
 }
 \examples{
 library(dpasurv)
+library(survival)
 
 data(simdata)
 

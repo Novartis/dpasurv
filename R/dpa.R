@@ -31,6 +31,7 @@
 #
 #' @examples
 #' library(dpasurv)
+#' library(survival)
 #'
 #' data(simdata)
 #'
