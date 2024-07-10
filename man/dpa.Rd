@@ -10,7 +10,7 @@ dpa(
   id,
   data,
   boot.n = 100,
-  method = "aareg",
+  method = "timereg",
   progress_bar = FALSE,
   ...
 )
@@ -28,8 +28,8 @@ any mediators and baseline covariates.}
 
 \item{boot.n}{Number of bootstrap samples.}
 
-\item{method}{The underlying implementation of Aalen's additive regression model. Defaults to "aareg", which relies on the survival::aareg() implementation,
-while method = "timereg" uses the timereg::aalen() implementation.}
+\item{method}{The underlying implementation of Aalen's additive regression model. Defaults to "timereg", which relies on the timereg::aalen() implementation,
+while method = "aareg" uses the survival::aareg() implementation.}
 
 \item{progress_bar}{Boolean. If TRUE, show progress bar. Defaults to FALSE.}
 
@@ -64,7 +64,7 @@ data(simdata)
 set.seed(1)
 
 # Perform dynamic path analysis:
-s <- dpa(survival::Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
+s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=50)
 
 # Calculate cumulative direct, indirect, and total effects:
 direct <- effect(x ~ outcome, s)
