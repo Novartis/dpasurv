@@ -25,7 +25,6 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(dpasurv)
-library(survival)
 ```
 
 
@@ -34,15 +33,20 @@ library(survival)
 ```{r}
 data(simdata)
 
-s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=100)
+set.seed(1)
 
+# Perform dynamic path analysis
+s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=500)
+
+# Calculate direct, indirect and total effects
 direct <- effect(x ~ outcome, s)
 indirect <- effect(x ~ M ~ outcome, s)
 total <- sum(direct, indirect)
 
-# Multiple treatment arms:
-s2 <- dpa(Surv(start,stop,event)~M+dose, list(M~dose), id="subject", data=simdata, boot.n=100)
+# Perform dynamic path analysis under multiple treatment arms:
+s2 <- dpa(Surv(start,stop,event)~M+dose, list(M~dose), id="subject", data=simdata, boot.n=500)
 
+# Calculate corresponding direct, indirect and total effects
 direct2 <- effect(dose ~ outcome, s2)
 indirect2 <- effect(dose ~ M ~ outcome, s2)
 total2 <- sum(direct2, indirect2)
@@ -76,19 +80,19 @@ We can input an object of type "effect"
 ggplot.effect(indirect)
 ```
 
-Alternatively, we can provide a list of "effect"-object, for example
+Alternatively, we can provide a list of "effect" objects, for example
 
 ```{r}
 ggplot.effect(list(direct, indirect, total))
 ```
 
-Different dose level will be plotted on top of each other
+Different dose levels will be plotted on top of each other
 
 ```{r}
 ggplot.effect(direct2)
 ```
 
-Also works when we have multiple treatment arms
+Also works when we plot a list of "effect" objects
 
 ```{r}
 ggplot.effect(list(direct2, indirect2, total2))
