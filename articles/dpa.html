@@ -58,7 +58,7 @@
                         <h4 data-toc-skip class="author">Matthias
 Kormaksson</h4>
             
-            <h4 data-toc-skip class="date">July 10, 2024</h4>
+            <h4 data-toc-skip class="date">July 11, 2024</h4>
       
 
       <div class="d-none name"><code>dpa.Rmd</code></div>
@@ -96,20 +96,30 @@ estimation, inference, and visualization.</p>
 diagrams</em> such as the one depicted in Figure 1 (a). A dynamic path
 diagram is defined in <span class="citation">(<a href="#ref-fosen">Fosen
 et al. 2006</a>)</span> as a time-indexed sequence of directed acyclic
-graphs that is characterized by a treatment variable, <span class="math inline">$\small Z$</span>, one or more longitudinal mediator
-variables, <span class="math inline">$\small M(t)$</span>, and a
-survival (time-to-event) outcome <span class="math inline">$\small
-dN(t)=1(t \leq T &lt; t+dt)$</span>, where <span class="math inline">$\small T$</span> denotes the time of event with
-hazard <span class="math inline">$\small \lambda(t) = \lim_{dt
-\rightarrow 0} P(dN(t)=1 | T \geq t)$</span>. The survival outcome takes
-the role of a single terminal node in the dynamic path diagram.
-Additional time-fixed confounder variables, such as baseline
-characteristics, <span class="math inline">$\small X$</span>, may be
-incorporated as well.</p>
+graphs that is characterized by a treatment variable,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>,
+one or more longitudinal mediator variables,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">M(t)</annotation></semantics></math>,
+and a survival (time-to-event) outcome
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo>≤</mo><mi>T</mi><mo>&lt;</mo><mi>t</mi><mo>+</mo><mi>d</mi><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">dN(t)=1(t \leq T &lt; t+dt)</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+denotes the time of event with hazard
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mo>lim</mo><mrow><mi>d</mi><mi>t</mi><mo>→</mo><mn>0</mn></mrow></msub><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>d</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo stretchy="false" form="prefix">|</mo><mi>T</mi><mo>≥</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\lambda(t) = \lim_{dt \rightarrow 0} P(dN(t)=1 | T \geq t)</annotation></semantics></math>.
+The survival outcome takes the role of a single terminal node in the
+dynamic path diagram. Additional time-fixed confounder variables, such
+as baseline characteristics,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>,
+may be incorporated as well.</p>
 <div class="figure" style="text-align: center">
-<img src="../reference/figures/tutorial_fig.png" alt="Figure 1. (a) A dynamic path diagram with treatment $\small Z$, a single mediator $\small M(t)$, and baseline confounders $\small X$; (b) Corresponding dynamic path diagram without the mediator process." width="630px"><p class="caption">
-Figure 1. (a) A dynamic path diagram with treatment <span class="math inline">$\small Z$</span>, a single mediator <span class="math inline">$\small M(t)$</span>, and baseline confounders <span class="math inline">$\small X$</span>; (b) Corresponding dynamic path
-diagram without the mediator process.
+<img src="../reference/figures/tutorial_fig.png" alt="Figure 1. (a) A dynamic path diagram with treatment $Z$, a single mediator $M(t)$, and baseline confounders $X$; (b) Corresponding dynamic path diagram without the mediator process." width="630px"><p class="caption">
+Figure 1. (a) A dynamic path diagram with treatment
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>,
+a single mediator
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">M(t)</annotation></semantics></math>,
+and baseline confounders
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>;
+(b) Corresponding dynamic path diagram without the mediator process.
 </p>
 </div>
 <p>Relationships between variables are represented by directed edges
@@ -117,50 +127,66 @@ between nodes and collectively the nodes and edges imply an underlying
 model structure. More specifically, each child node represents an entity
 to be modeled while the corresponding parent nodes represent the
 underlying model covariates. In Figure 1 (a) there are two implied
-models, one corresponding to the survival outcome variable, <span class="math inline">$\small dN(t)$</span>, and the other corresponding
-to the mediator response <span class="math inline">$\small
-M(t)$</span>.</p>
+models, one corresponding to the survival outcome variable,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">dN(t)</annotation></semantics></math>,
+and the other corresponding to the mediator response
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">M(t)</annotation></semantics></math>.</p>
 <p>A defining feature of dynamic path analysis as defined in <span class="citation">(<a href="#ref-fosen">Fosen et al. 2006</a>)</span> is
 the specific choice of models for the dynamic path diagram, namely the
 so-called <em>dynamic path models</em>. At the core of these is Aalen’s
 additive regression model for the survival outcome at the terminal node
 while all other models involve least squares regressions at each time
-point <span class="math inline">$\small t$</span>. In the following
-equations we see the dynamic path models corresponding to Figure 1 (a)
+point
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>.
+In the following equations we see the dynamic path models corresponding
+to Figure 1 (a)
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>λ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>R</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>β</mi><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>Z</mi><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>M</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>X</mi><mi>η</mi><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>M</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>α</mi><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>α</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>Z</mi><mo>+</mo><mi>X</mi><mi>η</mi><mo>+</mo><mi>ε</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}
 \lambda(t) &amp;= R(t) \cdot \left\{\beta_0(t) + \beta_1(t) Z + \beta_2(t) M(t) + X\eta \right\},  \tag{1} \\
 M(t) &amp;= \alpha_0(t) + \alpha_1(t) Z + X\eta + \varepsilon(t).  \tag{2}
-\end{align}</annotation></semantics></math> In the above <span class="math inline">$\small R(t)$</span> is the <em>at-risk</em>
-function indicating whether subject is still under observation
-(i.e. alive and still under follow up) just before time <span class="math inline">$\small t$</span>, and <span class="math inline">$\small \varepsilon(t)$</span> is a time-dependent
-error term. Under the <em>outcome model</em> (1) the hazard is assumed
-to change linearly as a function of treatment, mediator(s) and
-confounders, while in the <em>mediator model</em> (2) the longitudinal
-mediator is regressed on treatment and confounders.</p>
+\end{align}</annotation></semantics></math> In the above
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">R(t)</annotation></semantics></math>
+is the <em>at-risk</em> function indicating whether subject is still
+under observation (i.e. alive and still under follow up) just before
+time
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\varepsilon(t)</annotation></semantics></math>
+is a time-dependent error term. Under the <em>outcome model</em> (1) the
+hazard is assumed to change linearly as a function of treatment,
+mediator(s) and confounders, while in the <em>mediator model</em> (2)
+the longitudinal mediator is regressed on treatment and confounders.</p>
 <p>The regression functions of principal interest are those
 characterizing the relationships between treatment, mediator(s) and
-survival, namely <span class="math inline">$\small \beta_1(t),
-\beta_2(t)$</span>, and <span class="math inline">$\small
-\alpha_1(t)$</span>. The goal of dynamic path analysis (and the dpasurv
-package) is to estimate these key functions that serve as building
-blocks for the direct, indirect and total effects that are defined in
-the next section.</p>
+survival, namely
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><msub><mi>β</mi><mn>2</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta_1(t), \beta_2(t)</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha_1(t)</annotation></semantics></math>.
+The goal of dynamic path analysis (and the dpasurv package) is to
+estimate these key functions that serve as building blocks for the
+direct, indirect and total effects that are defined in the next
+section.</p>
 </div>
 <div class="section level3">
 <h3 id="direct-indirect-and-total-effects">Direct, indirect and total effects<a class="anchor" aria-label="anchor" href="#direct-indirect-and-total-effects"></a>
 </h3>
-<p>The cumulative direct and indirect effects at time <span class="math inline">$\small t$</span> are defined as as follows
+<p>The cumulative direct and indirect effects at time
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+are defined as as follows
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>u</mi><mi>m</mi><mi>d</mi><mi>i</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mi>t</mi></msubsup><msub><mi>β</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>d</mi><mi>s</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>u</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mi>t</mi></msubsup><msub><mi>α</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>β</mi><mn>2</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>d</mi><mi>s</mi><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}
 cumdir(t) &amp;= \int_0^t \beta_1(s)ds \label{eqn:direct_effect}, \\
 cumind(t) &amp;= \int_0^t \alpha_1(s)\beta_2(s)ds \label{eqn:indirect_effect}.
 \end{align}</annotation></semantics></math> The direct effect
 corresponds to the regression function along the direct arrow between
-treatment <span class="math inline">$\small Z$</span> and outcome <span class="math inline">$\small dN(t)$</span> in Figure 1 (a), while the
-indirect effect is obtained by multiplying the regression functions
-along the mediation path <span class="math inline">$\small Z \rightarrow
-M(t) \rightarrow dN(t)$</span>.</p>
-<p>The total effect is defined as the regression function <span class="math inline">$\small \gamma_1(t)$</span> from the mediator free
-Aalen’s additive model from Figure 1 (b)
+treatment
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
+and outcome
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">dN(t)</annotation></semantics></math>
+in Figure 1 (a), while the indirect effect is obtained by multiplying
+the regression functions along the mediation path
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>→</mo><mi>M</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>→</mo><mi>d</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Z \rightarrow M(t) \rightarrow dN(t)</annotation></semantics></math>.</p>
+<p>The total effect is defined as the regression function
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>γ</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\gamma_1(t)</annotation></semantics></math>
+from the mediator free Aalen’s additive model from Figure 1 (b)
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>R</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>γ</mi><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>γ</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>Z</mi><mo>+</mo><mi>X</mi><mi>η</mi><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
 \lambda(t) = R(t) \cdot \left\{\gamma_0(t) + \gamma_1(t) Z + X\eta \right\}, \tag{3}
 </annotation></semantics></math> and the corresponding cumulative total
@@ -182,13 +208,20 @@ total effects above are derived in <span class="citation">(<a href="#ref-dpasurv
 bands are obtained by bootstrap inference. More specifically, we
 repeatedly sample subjects with replacement from the set of all subjects
 and estimate the direct, indirect and total effects each time. Once we
-have obtained <span class="math inline">$\small B$</span> bootstrap
-estimates of the effects of interest, i.e. <span class="math inline">$\small (\widehat{cumdir}_b(t),
-\widehat{cumind}_b(t), \widehat{cumtot}_b(t)$</span>), for <span class="math inline">$\small b=1,\dots,B$</span>, then we calculate
-pointwise <span class="math inline">$\small 100\cdot(1-\alpha)$</span>%
-bootstrap confidence intervals at each timepoint <span class="math inline">$\small t$</span> by calculating the corresponding
-empirical <span class="math inline">$\small 100\cdot\alpha/2$</span> and
-<span class="math inline">$\small 100\cdot(1-\alpha/2)$</span>
+have obtained
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+bootstrap estimates of the effects of interest,
+i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mover><mrow><mi>c</mi><mi>u</mi><mi>m</mi><mi>d</mi><mi>i</mi><mi>r</mi></mrow><mo accent="true">̂</mo></mover><mi>b</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><msub><mover><mrow><mi>c</mi><mi>u</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>d</mi></mrow><mo accent="true">̂</mo></mover><mi>b</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><msub><mover><mrow><mi>c</mi><mi>u</mi><mi>m</mi><mi>t</mi><mi>o</mi><mi>t</mi></mrow><mo accent="true">̂</mo></mover><mi>b</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">(\widehat{cumdir}_b(t), \widehat{cumind}_b(t), \widehat{cumtot}_b(t)</annotation></semantics></math>),
+for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">b=1,\dots,B</annotation></semantics></math>,
+then we calculate pointwise
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">100\cdot(1-\alpha)</annotation></semantics></math>%
+bootstrap confidence intervals at each timepoint
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+by calculating the corresponding empirical
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mo>⋅</mo><mi>α</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">100\cdot\alpha/2</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mi>/</mi><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">100\cdot(1-\alpha/2)</annotation></semantics></math>
 percentiles.</p>
 </div>
 </div>
