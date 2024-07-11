@@ -21,7 +21,7 @@ for indirect effects of covariate on mediator2 mediated through mediator1.}
 object of class "effect" with following fields:
 \describe{
 \item{coefs}{data.frame containing the unique event times along with the calculated effect coefficients. For effects corresponding to a continuous variable this results in a
-single effect column. For factors with n.levels categories the data.frame contains n.levels-1 effect columns each representing the effect coefficients of a particular factor level (as compared to reference level).}
+single effect column. For factors with n.levels categories the data.frame contains n.levels-1 effect columns each representing the effect coefficient of a particular factor level (as compared to reference level).}
 \item{lower}{data.frame of same dimension as coefs containing the lower confidence bands of the effects stored in coefs}
 \item{upper}{data.frame of same dimension as coefs containing the upper confidence bands of the effects stored in coefs}
 \item{boot.coefs}{data.frame with three columns: one column of bootstrap sample ID, a second column of unique event times (per bootstrap sample), and

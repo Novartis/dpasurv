@@ -8,8 +8,6 @@ ggplot.effect(
   object,
   relative = FALSE,
   titles = NULL,
-  yintercept = 0,
-  linetype = "dashed",
   x_label = "Time",
   y_label = NULL
 )
@@ -21,10 +19,6 @@ ggplot.effect(
 
 \item{titles}{If NULL, function will automatically generate. Otherwise character vector of length equal to number of
 elements in object list}
-
-\item{yintercept}{y-intercept of horizontal line. Defaults to 0.}
-
-\item{linetype}{type of horinzontal line to plot. Defaults to "dashed".}
 
 \item{x_label}{Label for x-axis. Defaults to "Time"}
 

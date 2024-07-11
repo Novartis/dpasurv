@@ -124,14 +124,14 @@ get.meta <- function(out.formula, mediator.formulas, data) {
 
 #' Calculate bootstrap confidence bands for the direct or indirect effect of interest
 #'
-#' @param object direct or indirect effect of interest (as obtained by call to the function \code{effect}).
-#' @param alpha The confidence level, defaults to alpha=0.05
+#' @param object direct or indirect effect of interest (as obtained within a call to the function \code{effect}).
+#' @param alpha the confidence level
 #'
 #' @return data.frame containing the unique event times, estimated effect, and lower and upper confidence bands
 #' @export
 #'
 #' @keywords internal
-add.ci <- function(object, alpha=0.05) {
+add.ci <- function(object, alpha) {
 
   `%>%` <- dplyr::`%>%`
 
@@ -150,37 +150,6 @@ add.ci <- function(object, alpha=0.05) {
     dplyr::summarise_at(dplyr::vars(dplyr::one_of(effect.names)), function(x) stats::quantile(x, 1-alpha/2, na.rm=TRUE))
 
   return(object)
-
-}
-
-
-#' Resolves ties in event times by adding a small random noise to the duplicates
-#'
-#' This function mimics how ties are handled in timereg::read.surv()
-#'
-#' @param stopt stop times of the (start,stop] intervals across all subjects and time points
-#' @param event event status corresponding to each stopt
-#' @param obstimes sorted observed event times across all subjects
-#'
-#' @return stopt with duplicates adjusted by the small random noise. If no ties, then the function just returns stopt.
-#' @export
-#'
-resolve.ties <- function(stopt, event, obstimes) {
-
-  ties <- base::duplicated(stopt[event == 1])
-
-  if (base::sum(ties) > 0) {
-    index <- base::which(event == 1)[ties]
-    dt <- base::abs(diff(stopt))
-    dt <- base::min(dt[dt > 0]) * 0.5
-    # Add guarantee that we don't sample a new death time that exceeds another subject's death time!
-    dt2 <- base::diff(obstimes)
-    dt2 <- base::min(dt2[dt2 > 0])*0.5
-    dt <- base::min(dt, dt2)
-    stopt[index] <- stopt[index] + stats::runif(base::length(index)) * dt
-  }
-
-  return(stopt)
 
 }
 

@@ -3,11 +3,7 @@
 \docType{data}
 \name{simdata}
 \alias{simdata}
-\title{This is a simulated data set in the (start,stop] format. The subject column
-refers to subject ID and note that there are multiple rows per subject.
-The columns x and dose correspond to a treatment and dose variable respectively, while
-M refers to the longitudinal mediator values. The triplet (start, stop, event)
-corresponds to the time-to-event data in the required (start,stop] format.}
+\title{Simulated data}
 \format{
 A data frame with the following variables: \code{subject} (fct), \code{x} (dbl),
 \code{dose} (fct), \code{M} (dbl), \code{start} (dbl), \code{stop} (dbl), \code{event} (dbl).

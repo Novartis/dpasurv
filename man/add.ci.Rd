@@ -4,12 +4,12 @@
 \alias{add.ci}
 \title{Calculate bootstrap confidence bands for the direct or indirect effect of interest}
 \usage{
-add.ci(object, alpha = 0.05)
+add.ci(object, alpha)
 }
 \arguments{
-\item{object}{direct or indirect effect of interest (as obtained by call to the function \code{effect}).}
+\item{object}{direct or indirect effect of interest (as obtained within a call to the function \code{effect}).}
 
-\item{alpha}{The confidence level, defaults to alpha=0.05}
+\item{alpha}{the confidence level}
 }
 \value{
 data.frame containing the unique event times, estimated effect, and lower and upper confidence bands
