@@ -38,33 +38,33 @@ Dynamic path analysis introduced by [@fosen] is a method for performing mediatio
 
 ### Dynamic path analysis
 
-Dynamic path analysis involves modeling so-called *dynamic path diagrams* such as the one depicted in Figure 1 (a). A dynamic path diagram is defined in [@fosen] as a time-indexed sequence of directed acyclic graphs that is characterized by a treatment variable, $\small Z$, one or more longitudinal mediator variables, $\small M(t)$, and a survival (time-to-event) outcome $\small dN(t)=1(t \leq T < t+dt)$, where $\small T$ denotes the time of event with hazard $\small \lambda(t) = \lim_{dt \rightarrow 0} P(dN(t)=1 | T \geq t)$. The survival outcome takes the role of a single terminal node in the dynamic path diagram. Additional time-fixed confounder variables, such as baseline characteristics, $\small X$, may be incorporated as well. 
+Dynamic path analysis involves modeling so-called *dynamic path diagrams* such as the one depicted in Figure 1 (a). A dynamic path diagram is defined in [@fosen] as a time-indexed sequence of directed acyclic graphs that is characterized by a treatment variable, $Z$, one or more longitudinal mediator variables, $M(t)$, and a survival (time-to-event) outcome $dN(t)=1(t \leq T < t+dt)$, where $T$ denotes the time of event with hazard $\lambda(t) = \lim_{dt \rightarrow 0} P(dN(t)=1 | T \geq t)$. The survival outcome takes the role of a single terminal node in the dynamic path diagram. Additional time-fixed confounder variables, such as baseline characteristics, $X$, may be incorporated as well. 
 
-```{r, out.width = "630px", include=TRUE, fig.align="center", echo=FALSE, fig.cap="Figure 1. (a) A dynamic path diagram with treatment $\\small Z$, a single mediator $\\small M(t)$, and baseline confounders $\\small X$; (b) Corresponding dynamic path diagram without the mediator process."}
+```{r, out.width = "630px", include=TRUE, fig.align="center", echo=FALSE, fig.cap="Figure 1. (a) A dynamic path diagram with treatment $Z$, a single mediator $M(t)$, and baseline confounders $X$; (b) Corresponding dynamic path diagram without the mediator process."}
 knitr::include_graphics("../man/figures/tutorial_fig.png")
 ```
 
-Relationships between variables are represented by directed edges between nodes and collectively the nodes and edges imply an underlying model structure. More specifically, each child node represents an entity to be modeled while the corresponding parent nodes represent the underlying model covariates. In Figure 1 (a) there are two implied models, one corresponding to the survival outcome variable, $\small dN(t)$, and the other corresponding to the mediator response $\small M(t)$.
+Relationships between variables are represented by directed edges between nodes and collectively the nodes and edges imply an underlying model structure. More specifically, each child node represents an entity to be modeled while the corresponding parent nodes represent the underlying model covariates. In Figure 1 (a) there are two implied models, one corresponding to the survival outcome variable, $dN(t)$, and the other corresponding to the mediator response $M(t)$.
 
-A defining feature of dynamic path analysis as defined in [@fosen] is the specific choice of models for the dynamic path diagram, namely the so-called *dynamic path models*. At the core of these is Aalen's additive regression model for the survival outcome at the terminal node while all other models involve least squares regressions at each time point $\small t$. In the following equations we see the dynamic path models corresponding to Figure 1 (a)
+A defining feature of dynamic path analysis as defined in [@fosen] is the specific choice of models for the dynamic path diagram, namely the so-called *dynamic path models*. At the core of these is Aalen's additive regression model for the survival outcome at the terminal node while all other models involve least squares regressions at each time point $t$. In the following equations we see the dynamic path models corresponding to Figure 1 (a)
 \begin{align}
 \lambda(t) &= R(t) \cdot \left\{\beta_0(t) + \beta_1(t) Z + \beta_2(t) M(t) + X\eta \right\},  \tag{1} \\
 M(t) &= \alpha_0(t) + \alpha_1(t) Z + X\eta + \varepsilon(t).  \tag{2}
 \end{align}
-In the above $\small R(t)$ is the *at-risk* function indicating whether subject is still under observation (i.e. alive and still under follow up) just before time $\small t$, and $\small \varepsilon(t)$ is a time-dependent error term. Under the *outcome model* (1) the hazard is assumed to change linearly as a function of treatment, mediator(s) and confounders, while in the *mediator model* (2) the longitudinal mediator is regressed on treatment and confounders.
+In the above $R(t)$ is the *at-risk* function indicating whether subject is still under observation (i.e. alive and still under follow up) just before time $t$, and $\varepsilon(t)$ is a time-dependent error term. Under the *outcome model* (1) the hazard is assumed to change linearly as a function of treatment, mediator(s) and confounders, while in the *mediator model* (2) the longitudinal mediator is regressed on treatment and confounders.
 
-The regression functions of principal interest are those characterizing the relationships between treatment, mediator(s) and survival, namely $\small \beta_1(t), \beta_2(t)$, and $\small \alpha_1(t)$. The goal of dynamic path analysis (and the dpasurv package) is to estimate these key functions that serve as building blocks for the direct, indirect and total effects that are defined in the next section.
+The regression functions of principal interest are those characterizing the relationships between treatment, mediator(s) and survival, namely $\beta_1(t), \beta_2(t)$, and $\alpha_1(t)$. The goal of dynamic path analysis (and the dpasurv package) is to estimate these key functions that serve as building blocks for the direct, indirect and total effects that are defined in the next section.
 
 ### Direct, indirect and total effects
 
-The cumulative direct and indirect effects at time $\small t$ are defined as as follows
+The cumulative direct and indirect effects at time $t$ are defined as as follows
 \begin{align}
 cumdir(t) &= \int_0^t \beta_1(s)ds \label{eqn:direct_effect}, \\
 cumind(t) &= \int_0^t \alpha_1(s)\beta_2(s)ds \label{eqn:indirect_effect}.
 \end{align}
-The direct effect corresponds to the regression function along the direct arrow between treatment $\small Z$ and outcome $\small dN(t)$ in Figure 1 (a), while the indirect effect is obtained by multiplying the regression functions along the mediation path $\small Z \rightarrow M(t) \rightarrow dN(t)$.
+The direct effect corresponds to the regression function along the direct arrow between treatment $Z$ and outcome $dN(t)$ in Figure 1 (a), while the indirect effect is obtained by multiplying the regression functions along the mediation path $Z \rightarrow M(t) \rightarrow dN(t)$.
 
-The total effect is defined as the regression function $\small \gamma_1(t)$ from the mediator free Aalen's additive model from Figure 1 (b)
+The total effect is defined as the regression function $\gamma_1(t)$ from the mediator free Aalen's additive model from Figure 1 (b)
 $$
 \lambda(t) = R(t) \cdot \left\{\gamma_0(t) + \gamma_1(t) Z + X\eta \right\}, \tag{3}
 $$
@@ -79,7 +79,7 @@ $$
 
 ### Estimation and inference
 
-The analytical estimators for the cumulative direct, indirect, and total effects above are derived in [@dpasurv] and confidence bands are obtained by bootstrap inference. More specifically, we repeatedly sample subjects with replacement from the set of all subjects and estimate the direct, indirect and total effects each time. Once we have obtained $\small B$ bootstrap estimates of the effects of interest, i.e. $\small (\widehat{cumdir}_b(t), \widehat{cumind}_b(t), \widehat{cumtot}_b(t)$), for $\small b=1,\dots,B$, then we calculate pointwise $\small 100\cdot(1-\alpha)$\% bootstrap confidence intervals at each timepoint $\small t$ by calculating the corresponding empirical $\small 100\cdot\alpha/2$ and $\small 100\cdot(1-\alpha/2)$ percentiles.
+The analytical estimators for the cumulative direct, indirect, and total effects above are derived in [@dpasurv] and confidence bands are obtained by bootstrap inference. More specifically, we repeatedly sample subjects with replacement from the set of all subjects and estimate the direct, indirect and total effects each time. Once we have obtained $B$ bootstrap estimates of the effects of interest, i.e. $(\widehat{cumdir}_b(t), \widehat{cumind}_b(t), \widehat{cumtot}_b(t)$), for $b=1,\dots,B$, then we calculate pointwise $100\cdot(1-\alpha)$\% bootstrap confidence intervals at each timepoint $t$ by calculating the corresponding empirical $100\cdot\alpha/2$ and $100\cdot(1-\alpha/2)$ percentiles.
 
 ## 3. Getting started with dpasurv
 
