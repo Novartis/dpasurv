@@ -83,8 +83,8 @@ time-to-event outcome. A thorough review of the methodology can be found
 in the tutorial paper of <span class="citation">(<a href="#ref-dpasurv">Kormaksson et al. 2024</a>)</span>. In this vignette
 we will outline the modeling framework and define direct, indirect and
 total effects in the context of dynamic path analysis. We then
-demonstrate the the main functionalities of the package, namely
-estimation, inference, and visualization.</p>
+demonstrate the main functionalities of the package, namely estimation,
+inference, and visualization.</p>
 </div>
 <div class="section level2">
 <h2 id="methods">2. Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
@@ -196,9 +196,9 @@ cumtot(t) &amp;= \int_0^t \gamma_1(s)ds \label{eqn:total_effect}. \\
 \end{align}</annotation></semantics></math> One of the most appealing
 features of dynamic path analysis is the following analytical
 decomposition
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi>u</mi><mi>m</mi><mi>t</mi><mi>o</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>c</mi><mi>u</mi><mi>m</mi><mi>d</mi><mi>i</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>c</mi><mi>u</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
-cumtot(t) = cumdir(t) + cumind(t).
-</annotation></semantics></math></p>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>c</mi><mi>u</mi><mi>m</mi><mi>t</mi><mi>o</mi><mi>t</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>c</mi><mi>u</mi><mi>m</mi><mi>d</mi><mi>i</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>c</mi><mi>u</mi><mi>m</mi><mi>i</mi><mi>n</mi><mi>d</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}
+cumtot(t) &amp;= cumdir(t) + cumind(t). \\
+\end{align}</annotation></semantics></math></p>
 </div>
 <div class="section level3">
 <h3 id="estimation-and-inference">Estimation and inference<a class="anchor" aria-label="anchor" href="#estimation-and-inference"></a>
@@ -267,24 +267,24 @@ treated)</li>
 measured</li>
 <li>
 <em>stop:</em> Time that either marks the beginning of the next
-visit, or censoring (if event=0). Alternatively it marks the time of
+visit, or censoring (if event=0). Alternatively, it marks the time of
 event (if event=1)</li>
 <li>
 <em>event:</em> Binary event indicator</li>
 </ul>
 <p>At each visiting time, start, a new mediator measurement is taken.
 However, the mathematical assumption is that the intervals (start,stop]
-are open on the left and closed on the right, which means that the value
-of the mediator M for subject 1 at week 4 is taken to be 6.74. Under
-this assumption the risk of an event in the interval (start, stop] is
-influenced by the last observed mediator value.</p>
+are open on the left and closed on the right. Under this assumption the
+risk of an event in the interval (start, stop] is influenced by the last
+observed mediator value.</p>
 </div>
 <div class="section level3">
 <h3 id="implementation-in-a-nutshell">Implementation in a nutshell<a class="anchor" aria-label="anchor" href="#implementation-in-a-nutshell"></a>
 </h3>
 <p>Below we see the minimal code required for performing dynamic path
-analysis on <code>simdata</code>. It explores the direct effect of x on
-survival as well as the indirect effect mediated through M:</p>
+analysis on <code>simdata</code>. It explores the direct effect of
+treatment x on survival as well as the indirect effect mediated through
+M:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Perform dynamic path analysis</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dpa.html">dpa</a></span><span class="op">(</span><span class="fu"><a href="../reference/Surv.html">Surv</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">stop</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">M</span> <span class="op">+</span> <span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">M</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span>, id <span class="op">=</span> <span class="st">"subject"</span>, data <span class="op">=</span> <span class="va">simdata</span>, boot.n <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
@@ -317,16 +317,15 @@ depth analysis of <code>simdata</code>.</p>
 <p>Firstly, we note that there is a dose response trend when looking at
 longitudinal trends in the subject mediator profiles:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>mapping<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">start</span>, y <span class="op">=</span> <span class="va">M</span>, group<span class="op">=</span><span class="va">dose</span>, colour<span class="op">=</span><span class="va">dose</span><span class="op">)</span>, data<span class="op">=</span><span class="va">simdata</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>mapping<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">start</span>, y <span class="op">=</span> <span class="va">M</span>, group<span class="op">=</span><span class="va">dose</span><span class="op">)</span>, data<span class="op">=</span><span class="va">simdata</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour<span class="op">=</span><span class="va">dose</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dpa_files/figure-html/unnamed-chunk-5-1.png" width="480"></p>
 <p>The higher the dose, the higher the average mediator value is.</p>
 <p>We also note that there is a dose response trend when looking at
 association between dose levels and survival</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="../reference/Surv.html">Surv</a></span><span class="op">(</span><span class="va">start</span>, <span class="va">stop</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">dose</span>, data<span class="op">=</span><span class="va">simdata</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit</span>, col<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, xlab<span class="op">=</span><span class="st">"Time"</span>, ylab<span class="op">=</span><span class="st">"Survival"</span>, main<span class="op">=</span><span class="st">"KM-curves by dose level"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="fl">150</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="st">"low dose"</span>, <span class="st">"high dose"</span><span class="op">)</span>,</span>
-<span>col<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, lwd<span class="op">=</span><span class="fl">2</span>, bty<span class="op">=</span><span class="st">'n'</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, xlab<span class="op">=</span><span class="st">"Time"</span>, ylab<span class="op">=</span><span class="st">"Survival"</span>, main<span class="op">=</span><span class="st">"KM-curves by dose level"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="fl">150</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="st">"low dose"</span>, <span class="st">"high dose"</span><span class="op">)</span>, col<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, lwd<span class="op">=</span><span class="fl">2</span>, bty<span class="op">=</span><span class="st">'n'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="dpa_files/figure-html/unnamed-chunk-6-1.png" width="480"></p>
 <p>A Cox model with dose and mediator as covariates reveals a
 significant hazard ratio for high dose, but only a trend for the low
