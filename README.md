@@ -18,7 +18,7 @@ The effect-objects can be summed together to obtain the total effect (i.e. direc
 # To install the most recent stable version of dpasurv:
 install.packages("dpasurv")
 
-# To get bug fixes or features, install the development version:
+# To get bug fixes or new features, install the development version:
 devtools::install_github("Novartis/dpasurv")
 ```
 ## Usage
