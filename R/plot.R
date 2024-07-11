@@ -92,10 +92,8 @@ ggplot.effect <- function(object,
       # Define effect_type y argument:
       if (relative) {
         plot_dat$y <- exp(-plot_dat[[effect.names[ii]]])
-        yintercept <- 1
       } else {
         plot_dat$y <- plot_dat[[effect.names[ii]]]
-        yintercept <- 0
       }
 
       # Add confidence band to data:
@@ -124,7 +122,7 @@ ggplot.effect <- function(object,
   plot_object <- ggplot2::ggplot(data = all_plot_dat,
                                  ggplot2::aes(x = .data$times, y = .data$y, ymin = .data$ymin, ymax = .data$ymax)) +
     #ggplot2::geom_ribbon(fill = "azure3") +
-    ggplot2::geom_hline(yintercept = yintercept, color = "red", linetype = "dashed") +
+    ggplot2::geom_hline(yintercept = ifelse(relative, 1, 0), color = "red", linetype = "dashed") +
     ggplot2::geom_step() +
     ggplot2::geom_step(ggplot2::aes(y = .data$ymin), color="grey") +
     ggplot2::geom_step(ggplot2::aes(y = .data$ymax), color="grey") +
