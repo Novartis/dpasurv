@@ -21,6 +21,8 @@
 #' calculation of direct, indirect and total effects along with bootstrap confidence intervals.}
 #'   \item{meta}{a list keeping track of responses and covariates of each of the out.formula and mediator.formulas. Also keeps
 #' track of all variable types and level names in case of factors.}
+#'   \item{aalen}{Object storing information pertaining to the Aalen's additive model fit. Object is of class "aalen"
+#'   if method="timereg", and of class "aareg" if method="aareg".}
 #' }
 #' @export
 #'
@@ -78,12 +80,8 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=200, method = "
   # Arrange data by Subject and stop times:
   data <- data %>% dplyr::arrange(!!base::as.symbol(id), !!base::as.symbol(meta$outcome$stopt))
 
-  # Keep track of observed times (of event). This gets passed to the function resolve.ties to
-  # guarantee that (in case of ties) we don't generate death times that exceed other subject's death times
+  # Keep track of observed times (of event).
   obstimes <- unique(base::sort(data[[meta$outcome$stopt]][data[[meta$outcome$event]]==1]))
-
-  # Resolve ties (if any) by adding random noise to duplicates:
-  # data[[meta$outcome$stopt]] <- resolve.ties(data[[meta$outcome$stopt]], data[[meta$outcome$event]], obstimes)
 
   #########################
   # Obtain estimates
@@ -187,10 +185,6 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=200, method = "
       boot.data <- data[boot.sample,]
       boot.data$bootstrapID <- 1:base::nrow(boot.data)
     }
-
-    # Resolve ties by adding random noise to duplicates (by supplying all obstimes we guarantee against generating
-    # death times of a tied subject that exceeds another subject's death time):
-    # boot.data[[meta$outcome$stopt]] <- resolve.ties(boot.data[[meta$outcome$stopt]], boot.data[[meta$outcome$event]], obstimes)
 
     arguments[["data"]] <- boot.data
 

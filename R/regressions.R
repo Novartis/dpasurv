@@ -68,6 +68,7 @@ Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, 
 #' @param id character string indicating which column of 'data' corresponds to the subject ID.
 #' @param data Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with
 #' any mediators and baseline covariates.
+#' @param method passed from dpa call, defaults to "timereg", otherwise "aareg"
 #' @param ... other parameters passed to Aalen's additive hazards regression function "timereg::aalen()"
 #'
 #' @return data.frame with observation times and estimated coefficients for independent variables in "regformula"

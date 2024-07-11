@@ -45,6 +45,8 @@ Object of class `dpa` with following fields:
 calculation of direct, indirect and total effects along with bootstrap confidence intervals.}
   \item{meta}{a list keeping track of responses and covariates of each of the out.formula and mediator.formulas. Also keeps
 track of all variable types and level names in case of factors.}
+  \item{aalen}{Object storing information pertaining to the Aalen's additive model fit. Object is of class "aalen"
+  if method="timereg", and of class "aareg" if method="aareg".}
 }
 }
 \description{

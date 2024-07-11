@@ -14,6 +14,8 @@ Areg(out.formula, id, data, method, ...)
 \item{data}{Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with
 any mediators and baseline covariates.}
 
+\item{method}{passed from dpa call, defaults to "timereg", otherwise "aareg"}
+
 \item{...}{other parameters passed to Aalen's additive hazards regression function "timereg::aalen()"}
 }
 \value{

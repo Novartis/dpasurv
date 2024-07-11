@@ -32,7 +32,7 @@ library(ggplot2)
 
 ## 1. Introduction
 
-Dynamic path analysis introduced by [@fosen] is a method for performing mediation analysis with a longitudinal mediator and time-to-event outcome. A thorough review of the methodology can be found in the tutorial paper of [@dpasurv]. In this vignette we will outline the modeling framework and define direct, indirect and total effects in the context of dynamic path analysis. We then demonstrate the the main functionalities of the \textit{dpasurv} package, namely estimation, inference, and visualization.
+Dynamic path analysis introduced by [@fosen] is a method for performing mediation analysis with a longitudinal mediator and time-to-event outcome. A thorough review of the methodology can be found in the tutorial paper of [@dpasurv]. In this vignette we will outline the modeling framework and define direct, indirect and total effects in the context of dynamic path analysis. We then demonstrate the main functionalities of the \textit{dpasurv} package, namely estimation, inference, and visualization.
 
 ## 2. Methods 
 
@@ -73,9 +73,9 @@ and the corresponding cumulative total effect is defined as:
 cumtot(t) &= \int_0^t \gamma_1(s)ds \label{eqn:total_effect}. \\
 \end{align}
 One of the most appealing features of dynamic path analysis is the following analytical decomposition
-$$
-cumtot(t) = cumdir(t) + cumind(t).
-$$
+\begin{align}
+cumtot(t) &= cumdir(t) + cumind(t). \\
+\end{align}
 
 ### Estimation and inference
 
@@ -98,14 +98,14 @@ The data contains the following variables:
 * *dose:* Underlying dose (ctrl, low, high)
 * *M:* Longitudinal mediator measurement
 * *start:* Visiting times at which the mediator value is measured
-* *stop:* Time that either marks the beginning of the next visit, or censoring (if event=0). Alternatively it marks the time of event (if event=1)
+* *stop:* Time that either marks the beginning of the next visit, or censoring (if event=0). Alternatively, it marks the time of event (if event=1)
 * *event:* Binary event indicator
 
-At each visiting time, start, a new mediator measurement is taken. However, the mathematical assumption is that the intervals (start,stop] are open on the left and closed on the right, which means that the value of the mediator M for subject 1 at week 4 is taken to be `r simdata$M[simdata$subject==1 & simdata$stop==4]`. Under this assumption the risk of an event in the interval (start, stop] is influenced by the last observed mediator value.
+At each visiting time, start, a new mediator measurement is taken. However, the mathematical assumption is that the intervals (start,stop] are open on the left and closed on the right. Under this assumption the risk of an event in the interval (start, stop] is influenced by the last observed mediator value.
 
 ### Implementation in a nutshell
 
-Below we see the minimal code required for performing dynamic path analysis on `simdata`. It explores the direct effect of x on survival as well as the indirect effect mediated through M:
+Below we see the minimal code required for performing dynamic path analysis on `simdata`. It explores the direct effect of treatment x on survival as well as the indirect effect mediated through M:
 ```{r, eval=FALSE}
 # Perform dynamic path analysis
 s <- dpa(Surv(start, stop, event) ~ M + x, list(M ~ x), id = "subject", data = simdata, boot.n = 500)
@@ -135,7 +135,7 @@ Let us now use the dpasurv package to perform a slightly more in depth analysis 
 
 Firstly, we note that there is a dose response trend when looking at longitudinal trends in the subject mediator profiles:
 ```{r, message=FALSE, warning=FALSE, fig.width=5}
-ggplot(mapping=aes(x = start, y = M, group=dose, colour=dose), data=simdata) + geom_smooth()
+ggplot(mapping=aes(x = start, y = M, group=dose), data=simdata) + geom_smooth(aes(colour=dose))
 ```
 
 The higher the dose, the higher the average mediator value is. 
@@ -143,9 +143,8 @@ The higher the dose, the higher the average mediator value is.
 We also note that there is a dose response trend when looking at association between dose levels and survival
 ```{r, fig.width=5}
 fit <- survival::survfit(Surv(start, stop, event) ~ dose, data=simdata)
-plot(fit, col=1:3, xlab="Time", ylab="Survival", main="KM-curves by dose level")
-legend(150, 1, c("control", "low dose", "high dose"),
-col=1:3, lwd=2, bty='n')
+plot(fit, col=2:4, xlab="Time", ylab="Survival", main="KM-curves by dose level")
+legend(150, 1, c("control", "low dose", "high dose"), col=2:4, lwd=2, bty='n')
 ```
 
 A Cox model with dose and mediator as covariates reveals a significant hazard ratio for high dose, but only a trend for the low dose (both as compared to control), while there is no significant association between the mediator and survival:

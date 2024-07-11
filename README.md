@@ -15,11 +15,11 @@ The effect-objects can be summed together to obtain the total effect (i.e. direc
 ## Installation
 
 ``` r
-# The easiest way to install dpasurv is to run (assuming devtools package is already installed):
-devtools::install_github("Novartis/dpasurv")
+# To install the most recent stable version of dpasurv:
+install.packages("dpasurv")
 
-# If devtools package is not installed, then prior to above you may run:
-install.packages("devtools")
+# To get bug fixes or new features, install the development version:
+devtools::install_github("Novartis/dpasurv")
 ```
 ## Usage
 
@@ -47,7 +47,7 @@ ggplot.effect(list(direct, indirect, total))
 
 ## Citation
 
-The dpasurv package was published on github in parallel with the following manuscript:
+The dpasurv package was created as supplementary code for the following manuscript:
 
 ``` r
 @article{dpasurv,

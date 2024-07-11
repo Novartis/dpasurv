@@ -6,8 +6,6 @@
 #' @param relative should the effect be plotted on a relative survival scale (i.e. `y=exp(-effect)`)?. Defaults to FALSE.
 #' @param titles If NULL, function will automatically generate. Otherwise character vector of length equal to number of
 #' elements in object list
-#' @param yintercept y-intercept of horizontal line. Defaults to 0.
-#' @param linetype type of horinzontal line to plot. Defaults to "dashed".
 #' @param x_label Label for x-axis. Defaults to "Time"
 #' @param y_label Label for y-axis. Default when object scale is "cumulative" will be "Cumulative Effect" (relative=FALSE) and "Relative survival" (relative=TRUE).
 #' If object scale is "identity" then the default y_label will be "Effect".
@@ -37,8 +35,6 @@
 ggplot.effect <- function(object,
                           relative = FALSE,
                           titles = NULL,
-                          yintercept = 0,
-                          linetype = "dashed",
                           x_label = "Time",
                           y_label = NULL) {
 
@@ -80,7 +76,6 @@ ggplot.effect <- function(object,
       plot_dat$effect_type <- gsub("\\+", "+\n", object$label)
 
       if(!is.null(titles)) plot_dat$effect_type <- titles[iteration]
-
 
       # Plot cumulative effects on "outcome", otherwise regular regression effects
       if(object$scale=="cumulative") {
@@ -127,7 +122,7 @@ ggplot.effect <- function(object,
   plot_object <- ggplot2::ggplot(data = all_plot_dat,
                                  ggplot2::aes(x = .data$times, y = .data$y, ymin = .data$ymin, ymax = .data$ymax)) +
     #ggplot2::geom_ribbon(fill = "azure3") +
-    ggplot2::geom_hline(yintercept = yintercept, color = "red", linetype = linetype) +
+    ggplot2::geom_hline(yintercept = ifelse(relative, 1, 0), color = "red", linetype = "dashed") +
     ggplot2::geom_step() +
     ggplot2::geom_step(ggplot2::aes(y = .data$ymin), color="grey") +
     ggplot2::geom_step(ggplot2::aes(y = .data$ymax), color="grey") +
