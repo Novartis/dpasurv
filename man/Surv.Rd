@@ -2,7 +2,7 @@
 % Please edit documentation in R/internal.R
 \name{Surv}
 \alias{Surv}
-\title{Wrapper function for survival::Surv}
+\title{A wrapper function for survival::Surv}
 \usage{
 Surv(...)
 }
@@ -13,6 +13,6 @@ Surv(...)
 object of class survival::Surv
 }
 \description{
-Wrapper function for survival::Surv
+A wrapper function for survival::Surv
 }
 \keyword{internal}
