@@ -12,7 +12,6 @@
 #' @param w (optional) weights (not actually used in the default implementation of dynamic path analysis, set to 1)
 #'
 #' @return data.frame with observation times and estimated coefficients for independent variables in "regformula"
-#' @export
 #'
 #' @keywords internal
 Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, w=1) {
@@ -73,7 +72,6 @@ Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, 
 #'
 #' @return data.frame with observation times and estimated coefficients for independent variables in "regformula"
 #' @importFrom rlang .data
-#' @export
 #'
 #' @keywords internal
 Areg = function(out.formula, id, data, method, ...) {
