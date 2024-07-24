@@ -15,7 +15,7 @@ The effect-objects can be summed together to obtain the total effect (i.e. direc
 ## Installation
 
 ``` r
-# To install the most recent stable version of dpasurv:
+# To install the most recent stable version on CRAN:
 install.packages("dpasurv")
 
 # To get bug fixes or new features, install the development version:
@@ -53,7 +53,7 @@ The dpasurv package was created as supplementary code for the following manuscri
 @article{dpasurv,
   title={Dynamic path analysis for exploring treatment effect mediation processes in clinical trials with time-to-event endpoints},
   author={Kormaksson, M. and Lange, M. R. and Demanse, D. and Strohmaier, S. and Duan, J. and Xie, Q. and Carbini, M. and Bossen, C. and Guettner, A. and Maniero, A.},
-  journal={(submitted)},
+  journal={Statistics in Medicine (Accepted)},
   volume={},
   number={},
   pages={},
