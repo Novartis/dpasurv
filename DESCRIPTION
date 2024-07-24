@@ -23,7 +23,7 @@ Author: Novartis Pharma AG [cph],
   Susanne Strohmaier [aut],
   Markus Lange [aut],
   David Demanse [aut]
-Description: Dynamic path analysis with estimation of the corresponding direct, indirect, and total effects, based on Fosen et al. (2006). The main outcome of interest is a counting process from survival analysis (or recurrent events) data. At each time of event, ordinary linear regression is used to estimate the relation between the covariates, while Aalen's additive hazard model is used for the regression of the counting process on the covariates.
+Description: Dynamic path analysis with estimation of the corresponding direct, indirect, and total effects, based on Fosen et al., (2006) <doi:10.1007/s10985-006-9004-2>. The main outcome of interest is a counting process from survival analysis (or recurrent events) data. At each time of event, ordinary linear regression is used to estimate the relation between the covariates, while Aalen's additive hazard model is used for the regression of the counting process on the covariates.
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
