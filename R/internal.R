@@ -5,6 +5,7 @@
 #' @param formula
 #'
 #' @return character vector of the formula's variable names
+#' @export
 #'
 #' @keywords internal
 find.variables <- function(formula) {
@@ -29,6 +30,7 @@ find.variables <- function(formula) {
 #' @param data input data to the dpasurv::dpa function
 #'
 #' @return this function doesn't return anything
+#' @export
 #'
 #' @keywords internal
 check.dag <- function(meta, data) {
@@ -67,6 +69,7 @@ check.dag <- function(meta, data) {
 #' @param data obtained directly from corresponding input to dpasurv::dpa
 #'
 #' @return this function returns meta data associated with the call to dpasurv::dpa
+#' @export
 #'
 #' @keywords internal
 get.meta <- function(out.formula, mediator.formulas, data) {
@@ -125,6 +128,7 @@ get.meta <- function(out.formula, mediator.formulas, data) {
 #' @param alpha the confidence level
 #'
 #' @return data.frame containing the unique event times, estimated effect, and lower and upper confidence bands
+#' @export
 #'
 #' @keywords internal
 add.ci <- function(object, alpha) {
@@ -149,11 +153,12 @@ add.ci <- function(object, alpha) {
 
 }
 
-#' Wrapper function for survival::Surv
+#' A wrapper function for survival::Surv
 #'
 #' @param ... parameters passed to survival::Surv
 #'
 #' @return object of class survival::Surv
+#' @export
 #'
 #' @keywords internal
 Surv <- function(...) {
