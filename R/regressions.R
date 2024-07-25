@@ -19,7 +19,7 @@
 #'
 #' data(simdata)
 #'
-#' mediator.reg <- Mreg(regformula = ~x, obstimes = sort(simdata$stop[simdata$event==1]), startt = "start", stopt = "stop", event = "event", mediator = "M", dataset = simdata)
+#' obj <- Mreg(~x, sort(simdata$stop[simdata$event==1]), "start", "stop", "event", "M", simdata)
 #'
 #' @keywords internal
 Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, w=1) {
@@ -86,7 +86,7 @@ Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, 
 #'
 #' data(simdata)
 #'
-#' aalen.reg <- Areg(out.formula = Surv(start, stop, event) ~ M + x, data = simdata, id = "subject", method = "timereg")
+#' obj <- Areg(Surv(start,stop,event)~M+x, id="subject", data=simdata, method="timereg")
 #'
 #' @keywords internal
 Areg = function(out.formula, id, data, method, ...) {

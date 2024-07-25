@@ -29,7 +29,7 @@ library(dpasurv)
 
 data(simdata)
 
-aalen.reg <- Areg(out.formula = Surv(start, stop, event) ~ M + x, data = simdata, id = "subject", method = "timereg")
+obj <- Areg(Surv(start,stop,event)~M+x, id="subject", data=simdata, method="timereg")
 
 }
 \keyword{internal}
