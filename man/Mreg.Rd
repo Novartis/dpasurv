@@ -34,7 +34,7 @@ library(dpasurv)
 
 data(simdata)
 
-mediator.reg <- Mreg(regformula = ~x, obstimes = sort(simdata$stop[simdata$event==1]), startt = "start", stopt = "stop", event = "event", mediator = "M", dataset = simdata)
+obj <- Mreg(~x, sort(simdata$stop[simdata$event==1]), "start", "stop", "event", "M", simdata)
 
 }
 \keyword{internal}
