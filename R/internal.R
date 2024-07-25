@@ -5,9 +5,7 @@
 #' @param formula
 #'
 #' @return character vector of the formula's variable names
-#' @export
-#'
-#' @keywords internal
+#' @noRd
 find.variables <- function(formula) {
 
   `%>%` <- dplyr::`%>%`
@@ -30,9 +28,7 @@ find.variables <- function(formula) {
 #' @param data input data to the dpasurv::dpa function
 #'
 #' @return this function doesn't return anything
-#' @export
-#'
-#' @keywords internal
+#' @noRd
 check.dag <- function(meta, data) {
 
   `%>%` <- dplyr::`%>%`
@@ -69,9 +65,7 @@ check.dag <- function(meta, data) {
 #' @param data obtained directly from corresponding input to dpasurv::dpa
 #'
 #' @return this function returns meta data associated with the call to dpasurv::dpa
-#' @export
-#'
-#' @keywords internal
+#' @noRd
 get.meta <- function(out.formula, mediator.formulas, data) {
 
   `%>%` <- dplyr::`%>%`
@@ -128,9 +122,7 @@ get.meta <- function(out.formula, mediator.formulas, data) {
 #' @param alpha the confidence level
 #'
 #' @return data.frame containing the unique event times, estimated effect, and lower and upper confidence bands
-#' @export
-#'
-#' @keywords internal
+#' @noRd
 add.ci <- function(object, alpha) {
 
   `%>%` <- dplyr::`%>%`
@@ -158,9 +150,12 @@ add.ci <- function(object, alpha) {
 #' @param ... parameters passed to survival::Surv
 #'
 #' @return object of class survival::Surv
-#' @export
+#' @examples
+#' library(dpasurv)
 #'
-#' @keywords internal
+#' data(simdata)
+#'
+#' survival.obj <- Surv(simdata$start, simdata$stop, simdata$event)
 Surv <- function(...) {
   return(survival::Surv(...))
 }

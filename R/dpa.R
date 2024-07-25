@@ -24,6 +24,7 @@
 #'   \item{aalen}{Object storing information pertaining to the Aalen's additive model fit. Object is of class "aalen"
 #'   if method="timereg", and of class "aareg" if method="aareg".}
 #' }
+#' @importFrom rlang .data
 #' @export
 #'
 #' @details \code{dpa} performs Dynamic Path Analysis of a Directed Acyclic Graph (DAG). The out.formula
@@ -69,10 +70,10 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=200, method = "
     mediator.formulas <- base::list(mediator.formulas)
 
   # Parse all of the formulas into distinct (left & right hand side of ~) formula components:
-  meta <- get.meta(out.formula, mediator.formulas, data)
+  meta <- dpasurv:::get.meta(out.formula, mediator.formulas, data)
 
   # Make sure that the formulas define a valid DAG:
-  check.dag(meta, data)
+  dpasurv:::check.dag(meta, data)
 
   # How many mediator formulas?
   num.mediators <- base::length(mediator.formulas)
@@ -98,7 +99,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=200, method = "
   if (method == "timereg") {
 
     # Aalen's additive hazard model:
-    areg.obj <- do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(timereg::aalen), names(dot.args))]))
+    areg.obj <- do.call(dpasurv:::Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(timereg::aalen), names(dot.args))]))
 
     # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
     # at unique observed times. We sum up the coefficients across ties within unique times
@@ -117,7 +118,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=200, method = "
   } else { # Retrieve and summarise coefs under "aareg" implementation
 
     # Aalen's additive hazard model:
-    areg.obj <- do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(survival::aareg), names(dot.args))]))
+    areg.obj <- do.call(dpasurv:::Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(survival::aareg), names(dot.args))]))
 
     coefs[["outcome"]] <- areg.obj$coefs %>%
       dplyr::group_by(.data$times) %>%
@@ -127,7 +128,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=200, method = "
 
   # Mediator models:
   for (ii in 1:num.mediators)
-    coefs[[meta$mediator$y[ii]]] <- Mreg(regformula = stats::as.formula(meta$mediator$xreg[ii]),
+    coefs[[meta$mediator$y[ii]]] <- dpasurv:::Mreg(regformula = stats::as.formula(meta$mediator$xreg[ii]),
                                          obstimes = coefs[["outcome"]]$times, startt = meta$outcome$startt,
                                          stopt = meta$outcome$stopt, event = meta$outcome$event,
                                          mediator = meta$mediator$y[ii], dataset = data, w=1)
@@ -192,7 +193,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=200, method = "
     if (method == "timereg") {
 
       # Aalen's additive hazard model:
-      areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(timereg::aalen), names(dot.args))]))
+      areg.obj.boot <- base::do.call(dpasurv:::Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(timereg::aalen), names(dot.args))]))
 
       # Undo the random tie-breaking from timereg::aalen() and summarise the coefficients
       # at unique observed times. We sum up the coefficients across ties within unique times
@@ -212,7 +213,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=200, method = "
     } else { # Retrieve and summarise coefs under "aareg" implementation
 
       # Aalen's additive hazard model:
-      areg.obj.boot <- base::do.call(Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(survival::aareg), names(dot.args))]))
+      areg.obj.boot <- base::do.call(dpasurv:::Areg, c(arguments, dot.args[base::intersect(methods::formalArgs(survival::aareg), names(dot.args))]))
 
       boot.coefs[["outcome"]][[b]] <- areg.obj.boot$coefs %>%
         dplyr::group_by(.data$times) %>%
@@ -223,7 +224,7 @@ dpa <- function(out.formula, mediator.formulas, id, data, boot.n=200, method = "
 
     # Mediator models:
     for (ii in 1:num.mediators)
-      boot.coefs[[meta$mediator$y[ii]]][[b]] <- Mreg(regformula = stats::as.formula(meta$mediator$xreg[ii]),
+      boot.coefs[[meta$mediator$y[ii]]][[b]] <- dpasurv:::Mreg(regformula = stats::as.formula(meta$mediator$xreg[ii]),
                                                       obstimes = boot.coefs[["outcome"]][[b]]$times, startt = meta$outcome$startt,
                                                       stopt = meta$outcome$stopt, event = meta$outcome$event,
                                                       mediator = meta$mediator$y[ii], dataset = boot.data, w=1) %>%

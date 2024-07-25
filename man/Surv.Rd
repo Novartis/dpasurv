@@ -15,4 +15,10 @@ object of class survival::Surv
 \description{
 A wrapper function for survival::Surv
 }
-\keyword{internal}
+\examples{
+library(dpasurv)
+
+data(simdata)
+
+survival.obj <- Surv(simdata$start, simdata$stop, simdata$event)
+}
