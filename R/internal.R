@@ -159,6 +159,7 @@ add.ci <- function(object, alpha) {
 #' data(simdata)
 #'
 #' survival.obj <- Surv(simdata$start, simdata$stop, simdata$event)
+#' @keywords internal
 Surv <- function(...) {
   return(survival::Surv(...))
 }

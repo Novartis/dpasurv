@@ -22,3 +22,4 @@ data(simdata)
 
 survival.obj <- Surv(simdata$start, simdata$stop, simdata$event)
 }
+\keyword{internal}
