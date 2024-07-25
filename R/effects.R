@@ -44,7 +44,7 @@
 effect <- function(formula, object, alpha=0.05) {
 
   # set up an empty output object (of class "effect"):
-  output <- base::list(coefs = NULL, lower=NULL, upper=NULL, boot.coefs = NULL, label=NULL, formula=formula, scale=NULL, alpha=alpha)
+  output <- base::list(coefs = NULL, lower=NULL, upper=NULL, boot.coefs = NULL, label=NULL, formula=formula, scale=NULL)
 
   base::class(output) <- "effect"
 

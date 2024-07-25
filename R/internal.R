@@ -5,7 +5,15 @@
 #' @param formula
 #'
 #' @return character vector of the formula's variable names
-#' @noRd
+#' @export
+#'
+#' @examples
+#' library(dpasurv)
+#'
+#' data(simdata)
+#'
+#' vars <- find.variables(x ~ outcome)
+#' @keywords internal
 find.variables <- function(formula) {
 
   `%>%` <- dplyr::`%>%`
@@ -28,7 +36,16 @@ find.variables <- function(formula) {
 #' @param data input data to the dpasurv::dpa function
 #'
 #' @return this function doesn't return anything
-#' @noRd
+#' @export
+#'
+#' @examples
+#' library(dpasurv)
+#'
+#' data(simdata)
+#'
+#' meta <- get.meta(Surv(start, stop, event) ~ x + M, M ~ x, simdata)
+#' check.dag(meta, simdata)
+#' @keywords internal
 check.dag <- function(meta, data) {
 
   `%>%` <- dplyr::`%>%`
@@ -65,7 +82,15 @@ check.dag <- function(meta, data) {
 #' @param data obtained directly from corresponding input to dpasurv::dpa
 #'
 #' @return this function returns meta data associated with the call to dpasurv::dpa
-#' @noRd
+#' @export
+#'
+#' @examples
+#' library(dpasurv)
+#'
+#' data(simdata)
+#'
+#' meta <- get.meta(Surv(start, stop, event) ~ x + M, M ~ x, simdata)
+#' @keywords internal
 get.meta <- function(out.formula, mediator.formulas, data) {
 
   `%>%` <- dplyr::`%>%`
@@ -116,13 +141,29 @@ get.meta <- function(out.formula, mediator.formulas, data) {
 
 }
 
-#' Calculate bootstrap confidence bands for the direct or indirect effect of interest
+#' Calculate bootstrap confidence bands for effect of interest
 #'
-#' @param object direct or indirect effect of interest (as obtained within a call to the function \code{effect}).
+#' @param object object of class "effect"
 #' @param alpha the confidence level
 #'
-#' @return data.frame containing the unique event times, estimated effect, and lower and upper confidence bands
-#' @noRd
+#' @return object of class "effect" with updated confidence interval corresponding to alpha
+#' @export
+#'
+#' @examples
+#' library(dpasurv)
+#'
+#' data(simdata)
+#'
+#' # Perform dynamic path analysis:
+#' # We set boot.n=30 for the example to run fast, should be set large enough
+#' # so that results don't change meaningfully for different seeds.
+#' s <- dpa(Surv(start,stop,event)~M+x, list(M~x), id="subject", data=simdata, boot.n=30)
+#'
+#' # Calculate cumulative direct effect (which calculates a CI with alpha = 0.05 by default):
+#' direct <- effect(x ~ outcome, s)
+#'
+#' # update confidence interval for a new alpha (this overwrites the 0.05 CI already calculated above)
+#' direct <- add.ci(direct, alpha=0.10)
 add.ci <- function(object, alpha) {
 
   `%>%` <- dplyr::`%>%`
@@ -140,6 +181,8 @@ add.ci <- function(object, alpha) {
 
   object$upper <- boot.coefs %>%
     dplyr::summarise_at(dplyr::vars(dplyr::one_of(effect.names)), function(x) stats::quantile(x, 1-alpha/2, na.rm=TRUE))
+
+  object$alpha <- alpha
 
   return(object)
 
