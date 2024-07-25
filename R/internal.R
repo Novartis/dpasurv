@@ -188,7 +188,7 @@ add.ci <- function(object, alpha) {
 
 }
 
-#' Wrapper function for survival::Surv
+#' A wrapper function for survival::Surv
 #'
 #' @param ... parameters passed to survival::Surv
 #'
