@@ -145,11 +145,14 @@ add.ci <- function(object, alpha) {
 
 }
 
-#' A wrapper function for survival::Surv
+#' Wrapper function for survival::Surv
 #'
 #' @param ... parameters passed to survival::Surv
 #'
 #' @return object of class survival::Surv
+#'
+#' @export
+#'
 #' @examples
 #' library(dpasurv)
 #'

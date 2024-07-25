@@ -2,6 +2,7 @@
 
 S3method(plot,effect)
 S3method(sum,effect)
+export(Surv)
 export(dpa)
 export(effect)
 export(ggplot.effect)
