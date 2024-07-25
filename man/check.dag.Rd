@@ -22,7 +22,7 @@ library(dpasurv)
 
 data(simdata)
 
-meta <- get.meta(Surv(start, stop, event) ~ x + M, M ~ x, simdata)
+meta <- get.meta(Surv(start, stop, event) ~ x + M, list(M ~ x), simdata)
 check.dag(meta, simdata)
 }
 \keyword{internal}

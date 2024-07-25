@@ -7,11 +7,11 @@
 get.meta(out.formula, mediator.formulas, data)
 }
 \arguments{
-\item{out.formula}{obtained directly from corresponding input to dpasurv::dpa}
+\item{out.formula}{Survival formula for Aalen's additive hazards model.}
 
-\item{mediator.formulas}{obtained directly from corresponding input to dpasurv::dpa}
+\item{mediator.formulas}{list of mediator regression formulas.}
 
-\item{data}{obtained directly from corresponding input to dpasurv::dpa}
+\item{data}{Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with any mediators and baseline covariates.}
 }
 \value{
 this function returns meta data associated with the call to dpasurv::dpa
@@ -24,6 +24,6 @@ library(dpasurv)
 
 data(simdata)
 
-meta <- get.meta(Surv(start, stop, event) ~ x + M, M ~ x, simdata)
+meta <- get.meta(Surv(start, stop, event) ~ x + M, list(M ~ x), simdata)
 }
 \keyword{internal}
