@@ -2,7 +2,7 @@
 % Please edit documentation in R/internal.R
 \name{Surv}
 \alias{Surv}
-\title{A wrapper function for survival::Surv}
+\title{Wrapper function for survival::Surv}
 \usage{
 Surv(...)
 }
@@ -13,6 +13,13 @@ Surv(...)
 object of class survival::Surv
 }
 \description{
-A wrapper function for survival::Surv
+Wrapper function for survival::Surv
+}
+\examples{
+library(dpasurv)
+
+data(simdata)
+
+survival.obj <- Surv(simdata$start, simdata$stop, simdata$event)
 }
 \keyword{internal}

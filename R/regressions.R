@@ -12,9 +12,7 @@
 #' @param w (optional) weights (not actually used in the default implementation of dynamic path analysis, set to 1)
 #'
 #' @return data.frame with observation times and estimated coefficients for independent variables in "regformula"
-#' @export
-#'
-#' @keywords internal
+#' @noRd
 Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, w=1) {
 
   `%>%` <- dplyr::`%>%`
@@ -72,10 +70,7 @@ Mreg <- function(regformula, obstimes, startt, stopt, event, mediator, dataset, 
 #' @param ... other parameters passed to Aalen's additive hazards regression function "timereg::aalen()"
 #'
 #' @return data.frame with observation times and estimated coefficients for independent variables in "regformula"
-#' @importFrom rlang .data
-#' @export
-#'
-#' @keywords internal
+#' @noRd
 Areg = function(out.formula, id, data, method, ...) {
 
   `%>%` <- dplyr::`%>%`
