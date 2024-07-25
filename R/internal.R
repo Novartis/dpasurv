@@ -43,7 +43,7 @@ find.variables <- function(formula) {
 #'
 #' data(simdata)
 #'
-#' meta <- get.meta(Surv(start, stop, event) ~ x + M, M ~ x, simdata)
+#' meta <- get.meta(Surv(start, stop, event) ~ x + M, list(M ~ x), simdata)
 #' check.dag(meta, simdata)
 #' @keywords internal
 check.dag <- function(meta, data) {
@@ -77,9 +77,9 @@ check.dag <- function(meta, data) {
 #'
 #' Do not call this function on its own
 #'
-#' @param out.formula obtained directly from corresponding input to dpasurv::dpa
-#' @param mediator.formulas obtained directly from corresponding input to dpasurv::dpa
-#' @param data obtained directly from corresponding input to dpasurv::dpa
+#' @param out.formula Survival formula for Aalen's additive hazards model.
+#' @param mediator.formulas list of mediator regression formulas.
+#' @param data Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with any mediators and baseline covariates.
 #'
 #' @return this function returns meta data associated with the call to dpasurv::dpa
 #' @export
@@ -89,7 +89,7 @@ check.dag <- function(meta, data) {
 #'
 #' data(simdata)
 #'
-#' meta <- get.meta(Surv(start, stop, event) ~ x + M, M ~ x, simdata)
+#' meta <- get.meta(Surv(start, stop, event) ~ x + M, list(M ~ x), simdata)
 #' @keywords internal
 get.meta <- function(out.formula, mediator.formulas, data) {
 
