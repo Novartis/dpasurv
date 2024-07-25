@@ -44,14 +44,14 @@
 effect <- function(formula, object, alpha=0.05) {
 
   # set up an empty output object (of class "effect"):
-  output <- base::list(coefs = NULL, lower=NULL, upper=NULL, boot.coefs = NULL, label=NULL, formula=formula, scale=NULL, alpha=alpha)
+  output <- base::list(coefs = NULL, lower=NULL, upper=NULL, boot.coefs = NULL, label=NULL, formula=formula, scale=NULL)
 
   base::class(output) <- "effect"
 
   `%>%` <- dplyr::`%>%`
 
   # deparse formula to define path:
-  path.variables <- dpasurv:::find.variables(formula)
+  path.variables <- find.variables(formula)
 
   if (base::length(path.variables) == 2) {
     output$label <- base::paste0("direct(",base::format(formula),")")
@@ -112,7 +112,7 @@ effect <- function(formula, object, alpha=0.05) {
     dplyr::ungroup()
 
   # Add confidence bands:
-  output <- dpasurv:::add.ci(output, alpha=alpha)
+  output <- add.ci(output, alpha=alpha)
 
   return(output)
 
@@ -164,8 +164,8 @@ sum.effect <- function(effect1, effect2, ...) {
   alphas <- base::unlist(base::lapply(effect.list, function(x) x$alpha))
   scales <- base::unlist(base::lapply(effect.list, function(x) x$scale))
   formulas <- base::unlist(base::lapply(effect.list, function(x) x$formula))
-  first.vars <-base::unlist(base::lapply(formulas, function(x) dpasurv:::find.variables(x)[1]))
-  last.vars <- base::unlist(base::lapply(formulas, function(x) dpasurv:::find.variables(x)[base::length(dpasurv:::find.variables(x))]))
+  first.vars <-base::unlist(base::lapply(formulas, function(x) find.variables(x)[1]))
+  last.vars <- base::unlist(base::lapply(formulas, function(x) find.variables(x)[base::length(find.variables(x))]))
 
   if (base::sum(classes!="effect") > 0)
     stop("input should only consist of objects of class 'effect' as obtained from calling the function 'dpasurv::effect'")
@@ -198,7 +198,7 @@ sum.effect <- function(effect1, effect2, ...) {
   output$coefs <- output$coefs %>% dplyr::as_tibble()
   output$boot.coefs <- output$boot.coefs %>% dplyr::as_tibble()
 
-  output <- dpasurv:::add.ci(output, alpha = effect1$alpha)
+  output <- add.ci(output, alpha = effect1$alpha)
 
   return(output)
 
