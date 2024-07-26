@@ -8,3 +8,5 @@
 ^\.github$
 ^data-raw$
 ^cran-comments\.md$
+^CRAN-RELEASE$
+^LICENSE\.md$
