@@ -12,7 +12,7 @@ check.dag(meta, data)
 \item{data}{input data to the dpasurv::dpa function}
 }
 \value{
-this function doesn't return anything
+this function does not return anything, but throws an error with explanation if dag is not correctly specified
 }
 \description{
 Do not call this function on its own

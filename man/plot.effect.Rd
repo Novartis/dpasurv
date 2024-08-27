@@ -13,6 +13,9 @@
 
 \item{...}{other graphical parameters passed to the graphics::plot function.}
 }
+\value{
+this function does not return anything, but simply plots the associated effect encoded in the object x
+}
 \description{
 plotting method for class "effect"
 }
@@ -33,8 +36,12 @@ indirect <- effect(x ~ M ~ outcome, s)
 total <- sum(direct, indirect)
 
 par(mfrow=c(1,3))
+layout1x3 <- par(mfrow=c(1,3))
 plot(direct); abline(h=0, lty=2, col=2)
 plot(indirect); abline(h=0, lty=2, col=2)
 plot(total); abline(h=0, lty=2, col=2)
+
+# restore user's graphical parameters:
+par(layout1x3)
 
 }
