@@ -35,7 +35,7 @@ find.variables <- function(formula) {
 #' @param meta meta data obtained internally inside the dpasurv::dpa function
 #' @param data input data to the dpasurv::dpa function
 #'
-#' @return this function doesn't return anything
+#' @return this function does not return anything, but throws an error with explanation if dag is not correctly specified
 #' @export
 #'
 #' @examples
@@ -81,7 +81,12 @@ check.dag <- function(meta, data) {
 #' @param mediator.formulas list of mediator regression formulas.
 #' @param data Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with any mediators and baseline covariates.
 #'
-#' @return this function returns meta data associated with the call to dpasurv::dpa
+#' @return list of meta data associated with out.formula and mediator.formulas. Consists of the following fields:
+#' \describe{
+#' \item{outcome}{list containing variable names for startt, stopt, event, and right hand side of out.formula}
+#' \item{mediator}{list containing response variable name and right hand side of mediator.formulas}
+#' \item{variables}{list containing the class of variables in out.formula and mediator.formulas}
+#' }
 #' @export
 #'
 #' @examples

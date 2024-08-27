@@ -14,7 +14,12 @@ get.meta(out.formula, mediator.formulas, data)
 \item{data}{Data set in counting process format. In particular the data should contain a "start", "stop" and "event" column along with any mediators and baseline covariates.}
 }
 \value{
-this function returns meta data associated with the call to dpasurv::dpa
+list of meta data associated with out.formula and mediator.formulas. Consists of the following fields:
+\describe{
+\item{outcome}{list containing variable names for startt, stopt, event, and right hand side of out.formula}
+\item{mediator}{list containing response variable name and right hand side of mediator.formulas}
+\item{variables}{list containing the class of variables in out.formula and mediator.formulas}
+}
 }
 \description{
 Do not call this function on its own
